@@ -50,8 +50,8 @@
   (color-theme-initialize)
   (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
   (require 'color-theme-solarized)
-  (setq color-theme-dark-theme color-theme-solarized-dark
-        color-theme-light-theme color-theme-solarized-light
+  (setq color-theme-dark-theme 'color-theme-solarized-dark
+        color-theme-light-theme 'color-theme-solarized-light
         color-theme-is-dark nil
         color-theme-is-cumulative t)
   (update-color-theme) ; color-theme-is-cumulative appears to be buggy in init.
