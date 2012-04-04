@@ -248,8 +248,7 @@
   (setq ac-candidate-limit 20))
 
 ;; Someone kill the inventor of this
-(when (= emacs-major-version 24)
-  (set-message-beep 'silent))
+(set-message-beep 'silent)
 
 ;; Always show the column number
 (setq column-number-mode t)
@@ -308,10 +307,9 @@
 ;; SQLITE DBS do not have an extension!
 (setq sql-sqlite-login-params '((database :file "([^\\.]*\\|.*\\.\\(db\\|sqlite[23]?\\)\\)")))
 
-;; TODO Working on this
 ;; internal '.'s point to a url, filename or number
 ;; May be able to normalise case (afterwards??? - when we have all the counts)
-(defun foo ()
+(defun language-model-current-buffer ()
   "Currently creates a tf language model of the current buffer."
   (interactive)
   (save-excursion
@@ -336,7 +334,7 @@
                                         (log (/ word-count v)))))) ;; IDF - multiply this by TF of the line
                  language-model)))))
 
-;; Make ediff saner, it's still bad.
+;; Make ediff saner, it's still fucking shit.
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
