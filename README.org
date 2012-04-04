@@ -1,0 +1,2 @@
+* .emacs
+	This is only my personal .emacs files, copying is encouraged.
