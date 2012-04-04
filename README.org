@@ -1,2 +1,2 @@
 * .emacs
-	This is only my personal .emacs files, copying is encouraged.
+	These are my personal .emacs files, copying is encouraged.
