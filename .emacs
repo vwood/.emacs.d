@@ -1,0 +1,355 @@
+;; 
+;; On windows 
+;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
+;; - Add cygin-mount.el to .emacs.d
+;; - Set HOME & WORKSPACE environment vars
+;; - Set PYTHONPATH to the cygdrive path, ensuring it end with a ':'
+;;
+;; On linux
+;; - Install Inconsolata (or pick a different font)
+;; - Change "chromium" to desired browser
+;;
+;; All Systems:
+;; - Install color-theme (optional)
+;;
+
+;; DISABLE TRAMP MODE
+(setq tramp-mode nil)
+
+;; Access packages in .emacs.d
+(add-to-list 'load-path "~/.emacs.d")
+
+;; Remove clutter
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(setq inhibit-splash-screen t)
+
+; PRETTY COLOURS AND FONTS
+(defun update-color-theme ()
+  (if color-theme-is-dark
+      (funcall color-theme-dark-theme)
+      (funcall color-theme-light-theme)))
+
+(defun toggle-color-theme ()
+  (interactive)
+  (setq color-theme-is-dark (not color-theme-is-dark))
+  (update-color-theme))
+
+;; system specific fonts
+(when (eq 'windows-nt system-type)
+    (set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
+(when (eq 'gnu/linux system-type)
+    (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
+
+;; Make the font size reasonable
+(set-face-attribute 'default nil :height 100)
+
+(global-font-lock-mode t)
+(when (require 'color-theme nil t)
+  (color-theme-initialize)
+  (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
+  (require 'color-theme-solarized)
+  (setq color-theme-dark-theme color-theme-solarized-dark
+        color-theme-light-theme color-theme-solarized-light
+        color-theme-is-dark nil
+        color-theme-is-cumulative t)
+  (update-color-theme) ; color-theme-is-cumulative appears to be buggy in init.
+  (setq color-theme-is-cumulative nil))
+
+;; Always use CommonLisp extensions
+(require 'cl)
+
+;; Paren highlighting
+(show-paren-mode 1)
+; (setq show-paren-style 'parenthesis) ; Highlight just parens
+(setq show-paren-style 'expression) ; Highlight entire expression
+
+;; Fix tabs
+(let ((tab-size 4))
+  (add-hook 'c-mode-hook
+            (lambda () 
+              (setq c-basic-offset tab-size)
+              (setq c-indent-level tab-size)
+              (setq tab-width tab-size)))
+  (setq tab-width tab-size)
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width tab-size)
+  (setq-default python-indent tab-size)
+  (setq-default py-indent-offset tab-size)
+  (setq python-basic-offset tab-size)
+  (setq python-guess-indent nil))
+
+
+(add-hook 'python-mode-hook
+		 (lambda () 
+		   (setq indent-tabs-mode NIL)
+		   (setq tab-width (default-value 'tab-width))))
+
+;; If we're on a windows machine - setup Cygwin
+(let* ((cygwin-root "c:/cygwin")
+       (cygwin-bin (concat cygwin-root "/bin")))
+  (when (and (eq 'windows-nt system-type)
+	     (file-readable-p cygwin-root))
+
+    ;; Add cygwin to path
+    (setq exec-path (cons cygwin-bin exec-path))
+    (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+
+    ;; Change shell to ZSH
+    (setq shell-file-name "zsh")
+    (setenv "SHELL" shell-file-name)
+    (setq explicit-shell-file-name shell-file-name)
+
+    ;; Default dir to workspace
+    (when (getenv "WORKSPACE")
+      (setq default-directory (getenv "WORKSPACE")))
+
+    ;; NTEmacs can't seem to follow the link in cygwin
+    (setq python-python-command "python2.6")
+
+    (setq eshell-force-execution t)
+
+    (require 'cygwin-mount)
+    (cygwin-mount-activate)))
+
+;; USE RUBY MODE
+(autoload 'ruby-mode "ruby-mode"
+  "Mode for editting ruby code" t)
+(add-to-list 'auto-mode-alist '("\\.rb\\'" . ruby-mode))
+(setq interpreter-mode-alist 
+      (append '(("ruby" . ruby-mode)) 
+              interpreter-mode-alist))
+
+(autoload 'run-ruby "inf-ruby")
+(autoload 'inf-ruby-keys "inf-ruby")
+(add-hook 'ruby-mode-hook
+          '(lambda () (inf-ruby-keys)))
+
+;; Provide LEX & YACC 'MODES'
+(add-to-list 'auto-mode-alist '("\\.l\\'" . fundamental-mode))
+(add-to-list 'auto-mode-alist '("\\.y\\'" . fundamental-mode))
+
+;; Hide emacs turds
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; ORG-MODE
+(when (require 'org-install nil t)
+  (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+  (add-hook 'org-mode-hook 'turn-on-font-lock)
+  (define-key mode-specific-map [?a] 'org-agenda)
+  (require 'remember)
+  (add-hook 'remember-mode-hook 'org-remember-apply-template)
+  (define-key global-map [(control meta ?r)] 'remember)
+  (custom-set-variables
+   ;; List of files where todo items can be found:
+   '(org-agenda-files (quote ("~/todo.org")))
+   ;; File to store simple notes (used by remember)
+   '(org-default-notes-file "~/notes.org")
+   ;; Days the default agenda view should look ahead
+   '(org-agenda-ndays 7)
+   ;; Days early you are warned of impending deadlines
+   '(org-deadline-warning-days 14)
+   '(org-agenda-show-all-dates t)
+   '(org-agenda-skip-deadline-if-done t)
+   '(org-agenda-skip-scheduled-if-done t)
+   '(org-agenda-start-on-weekday nil)
+   '(org-reverse-note-order t)
+   ;; Store notes in default place (makes it quick + easy)
+   '(org-remember-store-without-prompt t)
+   ;; Templates for quick tasks (C-M-r t) and notes (C-M-r n)
+   '(org-remember-templates
+     (quote ((116 "* TODO %?\n %u" "~/todo.org" "Tasks")
+             (110 "* %u %?" "~/notes.org" "Notes"))))
+   '(remember-annotation-functions (quote (org-remember-annotation)))
+   '(remember-handler-functions (quote (org-remember-handler)))))
+
+;; Make Shebang scripts executable
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+
+;; Make windows rotate on Alt-o
+(defun rot-windows ()
+  "Rotate all the windows."
+  (interactive) 
+  (defun rot (list)
+    (append (cdr list) (list (car list))))
+  (let* ((w-l (window-list))
+         (rb-l (rot (mapcar 'window-buffer w-l)))
+         (rs-l (rot (mapcar 'window-start w-l))))
+    (mapcar* 'set-window-buffer w-l rb-l)
+    (mapcar* 'set-window-start w-l rs-l)
+    nil))
+
+(global-set-key [?\M-o] 'rot-windows)
+
+;;; PYTHON
+;; Allow loading of local packages in run-python
+(setq python-remove-cwd-from-path nil)
+;; Autoindent on return (\C-m seems to mirror enter)
+(add-hook 'python-mode-hook
+          (lambda () (define-key python-mode-map "\C-m" 'newline-and-indent)))
+
+;; I find myself doing this by habit, so also make vim work in eshell
+(defun eshell/vim (&rest args)
+  "Invoke `find-file' on the file.
+    \"vi +42 foo\" also goes to line 42 in the buffer."
+  (while args
+    (if (string-match "\\`\\+\\([0-9]+\\)\\'" (car args))
+        (let* ((line (string-to-number (match-string 1 (pop args))))
+               (file (pop args)))
+          (find-file file)
+          (goto-line line))
+      (find-file (pop args)))))
+(defun eshell/vi (&rest args)
+  (apply 'eshell/vim args))
+
+;; Markdown-mode
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+      (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+;; Add C-x p to be the opposite of C-x o
+(defun prev-window()
+  (interactive)
+  (other-window -1))
+(global-set-key [(control ?x) ?p] 'prev-window)
+
+;; Make Term sane
+(require 'term)
+(term-set-escape-char ?\C-x) ; Make C-x consistent inside term windows
+(define-key term-raw-map "\C-c" 'term-interupt-subjob)
+
+;; Replace yes with y
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Install escreen
+;; C-\ c, C-\ n, C-\ p, C-\ k
+(when (require 'escreen nil t)
+  (escreen-install))
+
+;; Auto-complete where available...
+(when (require 'auto-complete-config nil t)
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+  (ac-config-default)
+
+  ;; Auto-complete-mode + cygwin-mount + network mounts = frozen emacs
+  ;; Define cygwin-root earlier (in a single place)
+  (let* ((cygwin-root "c:/cygwin"))
+         (when (and (eq 'windows-nt system-type)
+                    (file-readable-p cygwin-root))
+           (setq ac-ignores (list "//"))))
+
+  (setq ac-quick-help-delay 0.8)
+  (setq ac-candidate-limit 20))
+
+;; Someone kill the inventor of this
+(when (= emacs-major-version 24)
+  (set-message-beep 'silent))
+
+;; Always show the column number
+(setq column-number-mode t)
+
+;; UTF-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+
+;; Configure ERC
+(setq erc-nick "scombinator"
+      erc-user-full-name "λ xyz.xz(yz)"
+      erc-hide-list '("JOIN" "PART" "QUIT")) ; Don't notify on join/part/quit
+
+;; Common Lisp Indentation rules != ELISP rules
+(add-hook 'lisp-mode-hook
+          (lambda () 
+            (set (make-local-variable lisp-indent-function)
+                 'common-lisp-indent-function)))
+
+
+;; In linux (without w3m's override below) use chromium
+(when (eq 'gnu/linux system-type)
+    (setq browse-url-browser-function 'browse-url-generic
+          browse-url-generic-program "chromium"))
+
+;; Start w3m when available
+;; W3M keys: 
+;; C-c C-t => new tab
+;; C-c C-w => close tab
+;; C-c C-p => prev tab
+;; C-c C-n => next tab
+;; C-c C-s => tab list
+(when (require 'w3m-load nil t)
+  (setq browse-url-browser-function 'w3m-browse-url)
+  (setq w3m-default-display-inline-images t))
+
+;; Open links with C-x g, open arbitrary urls with C-x u 
+(global-set-key [(control ?x) ?u] 'browse-url)
+(global-set-key [(control ?x) ?g] 'browse-url-at-point)
+
+;; IDO makes changing buffers nicer
+(setq ido-enable-flex-matching t
+      ido-everywhere t)
+(ido-mode 1)
+
+;; Don't interupt displaying for input.
+(setq redisplay-dont-pause t)
+
+;; Silliness - from #emacs
+(defun is-this-for-that ()
+  (interactive)
+  (with-temp-buffer (url-insert-file-contents
+                     "http://itsthisforthat.com/api.php?text") (buffer-substring
+                                                                (point-min)(point-max))))
+
+;; SQLITE DBS do not have an extension!
+(setq sql-sqlite-login-params '((database :file "([^\\.]*\\|.*\\.\\(db\\|sqlite[23]?\\)\\)")))
+
+;; TODO Working on this
+;; internal '.'s point to a url, filename or number
+;; May be able to normalise case (afterwards??? - when we have all the counts)
+(defun foo ()
+  "Currently creates a tf language model of the current buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let ((language-model (make-hash-table :test 'equal))
+          (opoint (point))
+          (word-count 0))
+
+      (while (re-search-forward "[A-Za-z0-9'_.-]*[A-Za-z0-9_]"  ;; Must have one non (.'-) and these do not go at the end.
+                                (point-max) t)
+        (let ((word (match-string 0)))
+          (if (gethash word language-model)
+              (puthash word (1+ (gethash word language-model)) language-model)
+            (puthash word 1 language-model))
+          (incf word-count)))
+
+      (with-output-to-temp-buffer "*Language Model*"
+        (maphash (lambda (k v)
+                   (setq result 
+                         (princ (format "%s -> %s\n" 
+                                        k 
+                                        (log (/ word-count v)))))) ;; IDF - multiply this by TF of the line
+                 language-model)))))
+
+;; Make ediff saner, it's still bad.
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function 'split-window-horizontally)
+
+;; Only seems to work on Emacs 24...
+(add-hook 'shell-mode-hook
+          (lambda ()
+            (add-hook 'window-configuration-change-hook
+                      (lambda ()
+                        (let ((proc (get-buffer-process (current-buffer)))
+                              (str (format "export COLUMNS=%s" (window-width))))
+                          (when proc (funcall comint-input-sender proc str))))
+                      nil t)))
+          
+;; Run an eshell on startup
+(eshell) 
+
