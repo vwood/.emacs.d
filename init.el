@@ -114,6 +114,14 @@
     (require 'cygwin-mount)
     (cygwin-mount-activate)))
 
+;; Slime setup on linux
+(when (eq 'gnu/linux system-type)
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/slime/")
+  (when (require 'slime nil t)
+    (slime-setup '(slime-fancy slime-asdf))
+    (setq common-lisp-hyperspec-root "/usr/share/doc/HyperSpec/")))
+
 ;; USE RUBY MODE
 (autoload 'ruby-mode "ruby-mode"
   "Mode for editting ruby code" t)
@@ -249,7 +257,8 @@
   (setq ac-candidate-limit 20))
 
 ;; Someone kill the inventor of this
-(set-message-beep 'silent)
+(when (= emacs-major-version 24)
+  (set-message-beep 'silent))
 
 ;; Always show the column number
 (setq column-number-mode t)
@@ -351,6 +360,9 @@
                             (when proc (funcall comint-input-sender proc str))))
                         nil t))))
           
-;; Run an eshell on startup
-(eshell) 
+;; Run a shell on startup
+;; eshell impacts badly on run-python in emacs23
+(if (= emacs-major-version 24)
+  (eshell) 
+  (shell))
 
