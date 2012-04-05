@@ -83,7 +83,7 @@
 
 (add-hook 'python-mode-hook
 		 (lambda () 
-		   (setq indent-tabs-mode NIL)
+		   (setq indent-tabs-mode nil)
 		   (setq tab-width (default-value 'tab-width))))
 
 ;; If we're on a windows machine - setup Cygwin
@@ -335,7 +335,7 @@
                                         (log (/ word-count v)))))) ;; IDF - multiply this by TF of the line
                  language-model)))))
 
-;; Make ediff saner, it's still fucking shit.
+;; Make ediff saner, it's still bad
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
