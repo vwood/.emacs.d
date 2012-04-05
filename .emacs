@@ -291,7 +291,8 @@
 
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
-      ido-everywhere t)
+      ido-everywhere t
+      ido-auto-merge-delay-time 9999999) ; Prevents ido from deciding to look elsewhere
 (ido-mode 1)
 
 ;; Don't interupt displaying for input.
@@ -342,11 +343,12 @@
 (add-hook 'shell-mode-hook
           (lambda ()
             (add-hook 'window-configuration-change-hook
-                      (lambda ()
-                        (let ((proc (get-buffer-process (current-buffer)))
-                              (str (format "export COLUMNS=%s" (window-width))))
-                          (when proc (funcall comint-input-sender proc str))))
-                      nil t)))
+                      (when (eq major-mode 'shell-mode)
+                        (lambda ()
+                          (let ((proc (get-buffer-process (current-buffer)))
+                                (str (format "export COLUMNS=%s" (window-width))))
+                            (when proc (funcall comint-input-sender proc str))))
+                        nil t))))
           
 ;; Run an eshell on startup
 (eshell) 
