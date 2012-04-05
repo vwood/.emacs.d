@@ -25,7 +25,7 @@
 (menu-bar-mode -1)
 (setq inhibit-splash-screen t)
 
-; PRETTY COLOURS AND FONTS
+;; Toggle between dark and night
 (defun update-color-theme ()
   (if color-theme-is-dark
       (funcall color-theme-dark-theme)
@@ -45,6 +45,7 @@
 ;; Make the font size reasonable
 (set-face-attribute 'default nil :height 100)
 
+;; Pretty Colours 
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
   (color-theme-initialize)
@@ -316,11 +317,11 @@
   (save-excursion
     (goto-char (point-min))
     (let ((language-model (make-hash-table :test 'equal))
-          (opoint (point))
-          (word-count 0))
+          (word-count 0)
+          (pmax (point-max)))
 
       (while (re-search-forward "[A-Za-z0-9'_.-]*[A-Za-z0-9_]"  ;; Must have one non (.'-) and these do not go at the end.
-                                (point-max) t)
+                                pmax t)
         (let ((word (match-string 0)))
           (if (gethash word language-model)
               (puthash word (1+ (gethash word language-model)) language-model)
