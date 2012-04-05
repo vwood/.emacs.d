@@ -1,7 +1,9 @@
 * .emacs
-	These are my personal .emacs files, copying is encouraged.
+	These are my personal .emacs files, copying is encouraged, but not expected.
 	Use as your ~/.emacs.d and ensure that no ~/.emacs file exists (or that it calls init.el).
 
 *** Licence
-   Obviously some of this is not my own, as far as I know it's all free to share. I take no responsibility. Ever.
+   Obviously most of this is not my own, nor do I claim it.
+   As far as I know it's all free to share. I take no responsibility. Ever.
+   (Unless release separately by myself.)
 
