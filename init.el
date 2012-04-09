@@ -299,6 +299,9 @@
 (global-set-key [(control ?x) ?u] 'browse-url)
 (global-set-key [(control ?x) ?g] 'browse-url-at-point)
 
+;; C-z is annoying/dangerous as is... Make it match other programs
+(global-set-key (kbd "C-z") 'undo)
+
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
       ido-everywhere t
