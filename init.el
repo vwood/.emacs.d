@@ -81,7 +81,6 @@
   (setq python-basic-offset tab-size)
   (setq python-guess-indent nil))
 
-
 (add-hook 'python-mode-hook
 		 (lambda () 
 		   (setq indent-tabs-mode nil)
@@ -324,7 +323,7 @@
 ;; internal '.'s point to a url, filename or number
 ;; May be able to normalise case (afterwards??? - when we have all the counts)
 (defun language-model-current-buffer ()
-  "Currently creates a tf language model of the current buffer."
+  "Currently creates a TF-IDF language model of the current buffer."
   (interactive)
   (save-excursion
     (goto-char (point-min))
