@@ -73,6 +73,12 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 
+
+(setq el-get-sources 
+      '((:name workgroups)))
+
+(el-get 'sync)
+
 ;; Fix tabs
 (let ((tab-size 4))
   (add-hook 'c-mode-hook
