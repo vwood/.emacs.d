@@ -367,6 +367,12 @@
                             (when proc (funcall comint-input-sender proc str))))
                         nil t))))
           
+;; Setup RSS feeds
+;; Open newsticker with M-x newsticker-show-news
+(setq newsticker-url-list '(("Stuff" "http://stuff.co.nz/rss/" nil nil nil)
+                            ("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
+(setq newsticker-frontend 'newsticker-plainview)
+
 ;; Run a shell on startup
 ;; eshell impacts badly on run-python in emacs23
 (if (= emacs-major-version 24)
