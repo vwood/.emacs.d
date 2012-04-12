@@ -379,6 +379,22 @@
                             ("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
 (setq newsticker-frontend 'newsticker-plainview)
 
+;; Bind f1 and S-f1 to keyboard macro commands
+(global-set-key '[(f1)] 'call-last-kbd-macro)
+(global-set-key '[(shift f1)] 'toggle-kbd-macro-recording-on)
+
+(defun toggle-kbd-macro-recording-on ()
+  "One-key keyboard macros: turn recording on."
+  (interactive)
+  (define-key global-map (this-command-keys) 'toggle-kbd-macro-recording-off)
+  (start-kbd-macro nil))
+
+(defun toggle-kbd-macro-recording-off ()
+  "One-key keyboard macros: turn recording off."
+  (interactive)
+  (define-key global-map (this-command-keys) 'toggle-kbd-macro-recording-on)
+  (end-kbd-macro))
+
 ;; Run a shell on startup
 ;; eshell impacts badly on run-python in emacs23
 (if (= emacs-major-version 24)
