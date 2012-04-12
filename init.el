@@ -3,14 +3,12 @@
 ;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
 ;; - Add cygin-mount.el to .emacs.d
 ;; - Set HOME & WORKSPACE environment vars
-;; - Set PYTHONPATH to the cygdrive path, ensuring it end with a ':'
+;; - Set PYTHONPATH to the cygdrive path, ensuring it ends with a ':'
+;; - Install gnutls and add to PATH
 ;;
 ;; On linux
 ;; - Install Inconsolata (or pick a different font)
 ;; - Change "chromium" to desired browser
-;;
-;; All Systems:
-;; - Install color-theme (optional)
 ;;
 
 ;; DISABLE TRAMP MODE
@@ -153,7 +151,6 @@
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
   (define-key global-map [(control meta ?r)] 'remember)
   (setq
-
    org-agenda-files '("~/todo.org")       ; List of files where todo items can be found:
    org-default-notes-file "~/notes.org"   ; File to store simple notes (used by remember)
    org-agenda-ndays 7                     ; Days the default agenda view should look ahead
