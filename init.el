@@ -152,30 +152,24 @@
   (require 'remember)
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
   (define-key global-map [(control meta ?r)] 'remember)
-  (custom-set-variables
-   ;; List of files where todo items can be found:
-   '(org-agenda-files (quote ("~/todo.org")))
-   ;; File to store simple notes (used by remember)
-   '(org-default-notes-file "~/notes.org")
-   ;; Days the default agenda view should look ahead
-   '(org-agenda-ndays 7)
-   ;; Days early you are warned of impending deadlines
-   '(org-deadline-warning-days 14)
-   '(org-agenda-show-all-dates t)
-   '(org-agenda-skip-deadline-if-done t)
-   '(org-agenda-skip-scheduled-if-done t)
-   '(org-agenda-start-on-weekday nil)
-   '(org-reverse-note-order t)
-   ;; Store notes in default place (makes it quick + easy)
-   '(org-remember-store-without-prompt t)
-   ;; Templates for quick tasks (C-M-r t) and notes (C-M-r n)
-   '(org-remember-templates
-     (quote ((116 "* TODO %?\n %u" "~/todo.org" "Tasks")
-             (110 "* %u %?" "~/notes.org" "Notes"))))
-   '(remember-annotation-functions (quote (org-remember-annotation)))
-   '(remember-handler-functions (quote (org-remember-handler)))))
+  (setq
 
-;; Make Shebang scripts executable
+   org-agenda-files '("~/todo.org")       ; List of files where todo items can be found:
+   org-default-notes-file "~/notes.org"   ; File to store simple notes (used by remember)
+   org-agenda-ndays 7                     ; Days the default agenda view should look ahead
+   org-deadline-warning-days 14           ; Days early you are warned of impending deadlines
+   org-agenda-show-all-dates t
+   org-agenda-skip-deadline-if-done t
+   org-agenda-skip-scheduled-if-done t
+   org-agenda-start-on-weekday nil
+   org-reverse-note-order t
+   org-remember-store-without-prompt t    ; Store notes in default place (makes it quicker)
+   org-remember-templates '((116 "* TODO %?\n %u" "~/todo.org" "Tasks") ; Templates for quick tasks (C-M-r t)
+                            (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
+   remember-annotation-functions '(org-remember-annotation)
+   remember-handler-functions '(org-remember-handler)))
+
+;; Make #! scripts executable
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
 
