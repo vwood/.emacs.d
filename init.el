@@ -347,6 +347,11 @@
                                         (log (/ word-count v)))))) ;; IDF - multiply this by TF of the line
                  language-model)))))
 
+;; Differentiate between buffers with the same name by their path
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq uniquify-strip-common-suffix t)
+
 ;; Make ediff saner, it's still bad
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -367,4 +372,5 @@
 (if (= emacs-major-version 24)
   (eshell) 
   (shell))
+
 
