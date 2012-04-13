@@ -51,7 +51,7 @@
   (if (require 'color-theme-solarized nil t)
       (setq color-theme-dark-theme 'color-theme-solarized-dark
 	    color-theme-light-theme 'color-theme-solarized-light)
-    (setq color-theme-dark-theme 'color-theme-comidia
+    (setq color-theme-dark-theme 'color-theme-charcoal-black
 	  color-theme-light-theme 'color-theme-vim-colors))
   (setq   color-theme-is-dark nil
 	  color-theme-is-cumulative t)
