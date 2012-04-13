@@ -64,21 +64,6 @@
 ; (setq show-paren-style 'parenthesis) ; Highlight just parens
 (setq show-paren-style 'expression) ; Highlight entire expression
 
-;; Use el-get, Downloading it if needed, (ensure gnutls is installed in windows)
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil t)
-  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" 
-                (lambda (s) 
-                  (let (el-get-master-branch) 
-                    (end-of-buffer) 
-                    (eval-print-last-sexp)))))
-
-
-(setq el-get-sources 
-      '((:name workgroups)))
-
-(el-get 'sync)
-
 ;; Fix tabs
 (let ((tab-size 4))
   (add-hook 'c-mode-hook
@@ -241,10 +226,6 @@
 ;; Replace yes with y
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Install escreen
-;; C-\ c, C-\ n, C-\ p, C-\ k
-(when (require 'escreen nil t)
-  (escreen-install))
 
 ;; Auto-complete where available...
 (when (require 'auto-complete-config nil t)
@@ -378,6 +359,28 @@
 (setq newsticker-url-list '(("Stuff" "http://stuff.co.nz/rss/" nil nil nil)
                             ("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
 (setq newsticker-frontend 'newsticker-plainview)
+
+;; Use el-get, Downloading it if needed, (ensure gnutls is installed in windows)
+;; May need to do by hand in windows.
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil t)
+  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" 
+                (lambda (s) 
+                  (let (el-get-master-branch) 
+                    (end-of-buffer) 
+                    (eval-print-last-sexp)))))
+
+(el-get 'sync '(workgroups))
+
+;; Use workgroups if available, otherwise try escreen ...
+(if (require 'workgroups nil t)
+    (progn 
+      (global-set-key (kbd "C-\\") nil)
+      (setq wg-prefix-key (kbd "C-\\")) ; Match escreen keybindings
+      (workgroups-mode 1))
+  (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
+    (escreen-install)))
+
 
 ;; Bind f1 and S-f1 to keyboard macro commands
 (global-set-key '[(f1)] 'call-last-kbd-macro)
