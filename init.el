@@ -23,41 +23,6 @@
 (menu-bar-mode -1)
 (setq inhibit-splash-screen t)
 
-;; Toggle between dark and night
-(defun update-color-theme ()
-  (if color-theme-is-dark
-      (funcall color-theme-dark-theme)
-      (funcall color-theme-light-theme)))
-
-(defun toggle-color-theme ()
-  (interactive)
-  (setq color-theme-is-dark (not color-theme-is-dark))
-  (update-color-theme))
-
-;; system specific fonts
-(when (eq 'windows-nt system-type)
-    (set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
-(when (eq 'gnu/linux system-type)
-    (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
-
-;; Make the font size reasonable
-(set-face-attribute 'default nil :height 100)
-
-;; Pretty Colours 
-(global-font-lock-mode t)
-(when (require 'color-theme nil t)
-  (color-theme-initialize)
-  (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
-  (if (require 'color-theme-solarized nil t)
-      (setq color-theme-dark-theme 'color-theme-solarized-dark
-	    color-theme-light-theme 'color-theme-solarized-light)
-    (setq color-theme-dark-theme 'color-theme-charcoal-black
-	  color-theme-light-theme 'color-theme-vim-colors))
-  (setq   color-theme-is-dark nil
-	  color-theme-is-cumulative t)
-  (update-color-theme) ; color-theme-is-cumulative appears to be buggy in init.
-  (setq color-theme-is-cumulative nil))
-
 ;; Always use CommonLisp extensions
 (require 'cl)
 
@@ -384,6 +349,27 @@
   (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
     (escreen-install)))
 
+
+;; Toggle between dark and night
+(defun update-color-theme ()
+  (if color-theme-is-dark
+      (funcall color-theme-dark-theme)
+      (funcall color-theme-light-theme)))
+
+(defun toggle-color-theme ()
+  (interactive)
+  (setq color-theme-is-dark (not color-theme-is-dark))
+  (update-color-theme))
+
+;; system specific fonts
+(when (eq 'windows-nt system-type)
+    (set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
+(when (eq 'gnu/linux system-type)
+    (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
+
+;; Make the font size reasonable
+(set-face-attribute 'default nil :height 100)
+
 ;; Bind f1 and S-f1 to keyboard macro commands
 (global-set-key '[(f1)] 'call-last-kbd-macro)
 (global-set-key '[(shift f1)] 'toggle-kbd-macro-recording-on)
@@ -406,4 +392,18 @@
   (eshell) 
   (shell))
 
-(update-color-theme) ; May need to update again if some extensions have done bad things
+(add-to-list 'load-path "~/.emacs.d/color-theme")
+(global-font-lock-mode t)
+(when (require 'color-theme nil t)
+  (require 'color-theme-autoloads "color-theme-autoloads")
+  (color-theme-initialize)
+  (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
+  (if (require 'color-theme-solarized nil t)
+      (setq color-theme-dark-theme 'color-theme-solarized-dark
+            color-theme-light-theme 'color-theme-solarized-light)
+    (setq color-theme-dark-theme 'color-theme-charcoal-black
+          color-theme-light-theme 'color-theme-vim-colors))
+  (setq color-theme-is-dark nil
+        color-theme-is-global t
+        color-theme-is-cumulative t)
+  (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
