@@ -48,11 +48,13 @@
 (when (require 'color-theme nil t)
   (color-theme-initialize)
   (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
-  (require 'color-theme-solarized)
-  (setq color-theme-dark-theme 'color-theme-solarized-dark
-        color-theme-light-theme 'color-theme-solarized-light
-        color-theme-is-dark nil
-        color-theme-is-cumulative t)
+  (if (require 'color-theme-solarized nil t)
+      (setq color-theme-dark-theme 'color-theme-solarized-dark
+	    color-theme-light-theme 'color-theme-solarized-light)
+    (setq color-theme-dark-theme 'color-theme-comidia
+	  color-theme-light-theme 'color-theme-vim-colors))
+  (setq   color-theme-is-dark nil
+	  color-theme-is-cumulative t)
   (update-color-theme) ; color-theme-is-cumulative appears to be buggy in init.
   (setq color-theme-is-cumulative nil))
 
@@ -380,7 +382,6 @@
       (workgroups-mode 1))
   (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
     (escreen-install)))
-
 
 ;; Bind f1 and S-f1 to keyboard macro commands
 (global-set-key '[(f1)] 'call-last-kbd-macro)
