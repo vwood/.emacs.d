@@ -379,7 +379,8 @@
     (progn 
       (global-set-key (kbd "C-\\") nil)
       (setq wg-prefix-key (kbd "C-\\")) ; Match escreen keybindings
-      (workgroups-mode 1))
+      (workgroups-mode 1)
+      (setq wg-morph-on nil))
   (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
     (escreen-install)))
 
@@ -404,3 +405,5 @@
 (if (= emacs-major-version 24)
   (eshell) 
   (shell))
+
+(update-color-theme) ; May need to update again if some extensions have done bad things
