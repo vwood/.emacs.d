@@ -254,6 +254,8 @@
 
 ;; C-z is annoying/dangerous as is... Make it match other programs
 (global-set-key (kbd "C-z") 'undo)
+;; M-ESC ESC or ESC ESC ESC is the cause of mysteriously disappearing buffers
+(global-set-key (kbd "M-ESC ESC") nil)
 
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
