@@ -337,7 +337,7 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 
-(el-get 'sync '(workgroups))
+(el-get 'sync '(workgroups graphviz-dot-mode))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
@@ -348,7 +348,6 @@
       (setq wg-morph-on nil))
   (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
     (escreen-install)))
-
 
 ;; Toggle between dark and night
 (defun update-color-theme ()
