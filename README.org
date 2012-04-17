@@ -3,6 +3,6 @@
 	Use as your ~/.emacs.d and ensure that no ~/.emacs file exists (or that it calls init.el).
 
 *** Licence
-   Obviously most of this is not my own, nor do I claim it.
+   Some of this is obviously not my own, nor do I claim anything outside of *init.el* as mine.
    As far as I know it's all free to share. I take no responsibility. Ever.
 
