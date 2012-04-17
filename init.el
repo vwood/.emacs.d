@@ -333,7 +333,7 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 
-(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode))
+(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
@@ -409,7 +409,7 @@
   (eshell) 
   (shell))
 
-(add-to-list 'load-path "~/.emacs.d/color-theme")
+;(add-to-list 'load-path "~/.emacs.d/color-theme")
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
   (require 'color-theme-autoloads "color-theme-autoloads")
