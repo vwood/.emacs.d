@@ -387,12 +387,13 @@
   (define-key global-map (this-command-keys) 'toggle-kbd-macro-recording-on)
   (end-kbd-macro))
 
-;; Bind f5 to revert-buffer-with-modified-check
+;; Bind f5 to revert-buffer-with-modified-check, and toggle auto-revert with C-f5
 (global-set-key '[(f5)] 
                 (lambda () 
                   "Revert the current buffer, prompting if modified."
                   (interactive)
                   (revert-buffer t (not (buffer-modified-p)) t)))
+(global-set-key '[(ctrl f5)] 'auto-revert-mode)
 
 ;; Run a shell on startup
 ;; eshell impacts badly on run-python in emacs23
