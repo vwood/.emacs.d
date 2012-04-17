@@ -173,12 +173,6 @@
 (defun eshell/vi (&rest args)
   (apply 'eshell/vim args))
 
-;; Markdown-mode
-(autoload 'markdown-mode "markdown-mode.el"
-  "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-      (cons '("\\.md" . markdown-mode) auto-mode-alist))
-
 ;; Add C-x p to be the opposite of C-x o
 (defun prev-window()
   (interactive)
@@ -339,7 +333,7 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 
-(el-get 'sync '(workgroups graphviz-dot-mode))
+(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
@@ -350,6 +344,11 @@
       (setq wg-morph-on nil))
   (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
     (escreen-install)))
+
+;; Markdown-mode
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 
 ;; Toggle between dark and night
 (defun update-color-theme ()
