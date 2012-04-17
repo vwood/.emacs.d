@@ -395,6 +395,15 @@
                   (revert-buffer t (not (buffer-modified-p)) t)))
 (global-set-key '[(ctrl f5)] 'auto-revert-mode)
 
+;; Compilation buffer is a waste of time if compilation was successful.
+;; I really want to prevent it from ever showing up
+(add-to-list 'compilation-finish-function 
+             (lambda (status code msg)
+               (when (and (eq status 'exit) (zerop code))
+                 (bury-buffer "*compilation*")
+                 (replace-buffer-in-windows "*compilation*"))
+               (cons msg code)))
+  
 ;; Run a shell on startup
 ;; eshell impacts badly on run-python in emacs23
 (if (= emacs-major-version 24)
