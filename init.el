@@ -127,6 +127,7 @@
    org-agenda-skip-scheduled-if-done t
    org-agenda-start-on-weekday nil
    org-reverse-note-order t
+   org-startup-indented t
    org-remember-store-without-prompt t    ; Store notes in default place (makes it quicker)
    org-remember-templates '((116 "* TODO %?\n %u" "~/todo.org" "Tasks") ; Templates for quick tasks (C-M-r t)
                             (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
@@ -332,7 +333,7 @@
                   (let (el-get-master-branch) 
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
-
+(setq el-get-git-shallow-clone t)
 (el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme))
 
 ;; Use workgroups if available, otherwise try escreen ...
@@ -369,6 +370,9 @@
 
 ;; Make the font size reasonable
 (set-face-attribute 'default nil :height 100)
+
+;; Rid us of the disabled C-x C-n command, if I want to use that then M-x is fine
+(global-set-key (kbd "C-x C-n") nil)
 
 ;; Bind f1 and S-f1 to keyboard macro commands
 (global-set-key '[(f1)] 'call-last-kbd-macro)
