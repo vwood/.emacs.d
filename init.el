@@ -334,7 +334,7 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 (setq el-get-git-shallow-clone t)
-(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized))
+(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized haskell-mode))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
