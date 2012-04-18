@@ -334,7 +334,12 @@
                     (end-of-buffer) 
                     (eval-print-last-sexp)))))
 (setq el-get-git-shallow-clone t)
+
+(when (/= emacs-major-version 24)
+    (defvar custom-theme-load-path nil)) ; work around color-theme-solarized recipe on emacs23
 (el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized haskell-mode))
+(when (/= emacs-major-version 24)
+  (add-to-list 'load-path (first custom-theme-load-path)))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
@@ -413,12 +418,10 @@
   (eshell) 
   (shell))
 
-;(add-to-list 'load-path "~/.emacs.d/color-theme")
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
   (require 'color-theme-autoloads "color-theme-autoloads")
   (color-theme-initialize)
-  (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
   (if (require 'color-theme-solarized nil t)
       (setq color-theme-dark-theme 'color-theme-solarized-dark
             color-theme-light-theme 'color-theme-solarized-light)
