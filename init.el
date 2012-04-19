@@ -151,6 +151,14 @@
     (mapcar* 'set-window-start w-l rs-l)
     nil))
 
+;; TODO: trim *...* buffers - limit it to just buffers with files...
+(defun list-modified-buffers ()
+  "List modified buffers."
+  (interactive)
+  (with-output-to-temp-buffer "*modified-buffers*"
+    (print 
+     (remove-if-not 'buffer-modified-p (buffer-list)))))
+
 (global-set-key [?\M-o] 'rot-windows)
 
 ;;; PYTHON
@@ -264,9 +272,10 @@
 ;; Silliness - from #emacs
 (defun is-this-for-that ()
   (interactive)
-  (with-temp-buffer (url-insert-file-contents
-                     "http://itsthisforthat.com/api.php?text") (buffer-substring
-                                                                (point-min)(point-max))))
+  (with-temp-buffer
+    (url-insert-file-contents
+     "http://itsthisforthat.com/api.php?text") (buffer-substring
+     (point-min)(point-max))))
 
 ;; SQLITE DBS do not have an extension!
 (setq sql-sqlite-login-params '((database :file "([^\\.]*\\|.*\\.\\(db\\|sqlite[23]?\\)\\)")))
