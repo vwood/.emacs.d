@@ -319,12 +319,16 @@
 ;; Only seems to work on Emacs 24...
 (add-hook 'shell-mode-hook
           (lambda ()
+            (make-local-variable 'shell-window-width)
+            (setq shell-window-width (window-width))
             (add-hook 'window-configuration-change-hook
-                      (when (eq major-mode 'shell-mode)
+                      (when (and (eq major-mode 'shell-mode)
+                                 (/= shell-window-width (window-width)))
                         (lambda ()
                           (let ((proc (get-buffer-process (current-buffer)))
                                 (str (format "export COLUMNS=%s" (window-width))))
-                            (when proc (funcall comint-input-sender proc str))))
+                            (when proc (funcall comint-input-sender proc str)))
+                          (setq shell-window-width (window-width)))
                         nil t))))
           
 ;; Setup RSS feeds
