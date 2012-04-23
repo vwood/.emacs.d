@@ -117,6 +117,7 @@
   (require 'remember)
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
   (define-key global-map [(control meta ?r)] 'remember)
+  (require 'org-publish)
   (setq
    org-agenda-files '("~/todo.org")       ; List of files where todo items can be found:
    org-default-notes-file "~/notes.org"   ; File to store simple notes (used by remember)
