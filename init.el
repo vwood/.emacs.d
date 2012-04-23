@@ -440,3 +440,5 @@
         color-theme-is-global t
         color-theme-is-cumulative t)
   (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
+
+(global-set-key '[(ctrl %)] 'query-replace-regexp)
