@@ -117,7 +117,7 @@
   (require 'remember)
   (add-hook 'remember-mode-hook 'org-remember-apply-template)
   (define-key global-map [(control meta ?r)] 'remember)
-  (require 'org-publish)
+  (require 'org-publish nil t)
   (setq
    org-agenda-files '("~/todo.org")       ; List of files where todo items can be found:
    org-default-notes-file "~/notes.org"   ; File to store simple notes (used by remember)
@@ -323,9 +323,9 @@
             (make-local-variable 'shell-window-width)
             (setq shell-window-width (window-width))
             (add-hook 'window-configuration-change-hook
+                    (lambda ()
                       (when (and (eq major-mode 'shell-mode)
                                  (/= shell-window-width (window-width)))
-                        (lambda ()
                           (let ((proc (get-buffer-process (current-buffer)))
                                 (str (format "export COLUMNS=%s" (window-width))))
                             (when proc (funcall comint-input-sender proc str)))
