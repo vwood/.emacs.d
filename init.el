@@ -351,7 +351,7 @@
 
 (when (/= emacs-major-version 24)
     (defvar custom-theme-load-path nil)) ; work around color-theme-solarized recipe on emacs23
-(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized haskell-mode))
+(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized haskell-mode yasnippet))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
@@ -425,12 +425,10 @@
                  (bury-buffer "*compilation*")
                  (replace-buffer-in-windows "*compilation*"))
                (cons msg code)))
-  
-;; Run a shell on startup
-;; eshell impacts badly on run-python in emacs23
-(if (= emacs-major-version 24)
-  (eshell) 
-  (shell))
+
+;; Yasnippet
+(require 'yasnippet)
+(yas/global-mode 1)
 
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
@@ -447,3 +445,13 @@
   (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
 
 (global-set-key '[(ctrl %)] 'query-replace-regexp)
+(setq glasses-separate-parentheses-p nil) ; Do not separate parens in glasses-mode
+
+;; Try to restore old workgroups - save them there if you want restored by default.
+;; Run a shell on startup
+;; eshell impacts badly on run-python in emacs23
+(let ((wg-location "~/.emacs.d/workgroups"))
+  (cond ((file-exists-p wg-location) (wg-load wg-location))
+        ((= emacs-major-version 24) (eshell))
+        (t (shell))))
+
