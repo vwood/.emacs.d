@@ -213,10 +213,12 @@
   (setq ac-quick-help-delay 0.8
         ac-candidate-limit 20)
 
-  ;; Stop stealing RETURN, (use C-RET instead)
+  ;; Stop stealing RETURN, (use C-RET / M-RET instead)
   ;; This is irritating when it completes and you want to get on with the next line
   (define-key ac-complete-mode-map "\r" nil)
-  (define-key (kbd "C-RET") 'ac-complete))
+  (if (eq window-system nil)
+      (define-key ac-complete-mode-map (kbd "<M-return>") 'ac-complete)
+    (define-key ac-complete-mode-map (kbd "<C-return>") 'ac-complete)))
 
 ;; Someone kill the inventor of this
 (when (= emacs-major-version 24)
@@ -420,7 +422,7 @@
                   "Revert the current buffer, prompting if modified."
                   (interactive)
                   (revert-buffer t (not (buffer-modified-p)) t)))
-(global-set-key '[(ctrl f5)] 'auto-revert-mode)
+
 
 ;; Compilation buffer is a waste of time if compilation was successful.
 ;; I really want to prevent it from ever showing up
