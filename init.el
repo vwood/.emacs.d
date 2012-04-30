@@ -210,8 +210,13 @@
                     (file-readable-p cygwin-root))
            (setq ac-ignores (list "//"))))
 
-  (setq ac-quick-help-delay 0.8)
-  (setq ac-candidate-limit 20))
+  (setq ac-quick-help-delay 0.8
+        ac-candidate-limit 20)
+
+  ;; Stop stealing RETURN, (use C-RET instead)
+  ;; This is irritating when it completes and you want to get on with the next line
+  (define-key ac-complete-mode-map "\r" nil)
+  (define-key (kbd "C-RET") 'ac-complete))
 
 ;; Someone kill the inventor of this
 (when (= emacs-major-version 24)
