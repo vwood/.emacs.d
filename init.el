@@ -338,7 +338,7 @@
                             (when proc (funcall comint-input-sender proc str)))
                           (setq shell-window-width (window-width)))
                         nil t))))
-          
+
 ;; Setup RSS feeds
 ;; Open newsticker with M-x newsticker-show-news
 (setq newsticker-url-list '(("Stuff" "http://stuff.co.nz/rss/" nil nil nil)
@@ -456,9 +456,10 @@
 
 ;; Try to restore old workgroups - save them there if you want restored by default.
 ;; Run a shell on startup
-;; eshell impacts badly on run-python in emacs23
-(let ((wg-location "~/.emacs.d/workgroups"))
-  (cond ((file-exists-p wg-location) (wg-load wg-location))
-        ((= emacs-major-version 24) (eshell))
-        (t (shell))))
-
+(let ((wg-location "~/.emacs.d/workgroups")
+      (wg-local "~/.emacs.d/local/workgroups"))
+  (cond 
+   ((file-exists-p wg-local) (wg-load wg-local))
+   ((file-exists-p wg-location) (wg-load wg-location))
+   ((= emacs-major-version 24) (eshell)) ; eshell impacts badly on run-python in emacs23
+   (t (shell))))
