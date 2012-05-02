@@ -434,8 +434,8 @@
                (cons msg code)))
 
 ;; Yasnippet
-(require 'yasnippet)
-(yas/global-mode 1)
+(when (require 'yasnippet nil t)
+  (yas/global-mode 1))
 
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
