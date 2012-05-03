@@ -129,6 +129,7 @@
    org-agenda-start-on-weekday nil
    org-reverse-note-order t
    org-startup-indented t
+   org-export-with-sub-superscripts '{}   ; Always require braces around super/sub-scripts
    org-remember-store-without-prompt t    ; Store notes in default place (makes it quicker)
    org-remember-templates '((116 "* TODO %?\n %u" "~/todo.org" "Tasks") ; Templates for quick tasks (C-M-r t)
                             (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
