@@ -17,6 +17,10 @@
 ;; Access packages in .emacs.d
 (add-to-list 'load-path "~/.emacs.d")
 
+;; Add MARMALADE to package-archives in case we use ELPA
+(when (= emacs-major-version 24)
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/")))
+
 ;; Remove clutter
 
 (when window-system
