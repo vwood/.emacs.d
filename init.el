@@ -135,7 +135,25 @@
    org-remember-templates '((116 "* TODO %?\n %u" "~/todo.org" "Tasks") ; Templates for quick tasks (C-M-r t)
                             (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
    remember-annotation-functions '(org-remember-annotation)
-   remember-handler-functions '(org-remember-handler)))
+   remember-handler-functions '(org-remember-handler))
+  (org-defkey org-mode-map (kbd "C-c n") 'my-org-table-swap-next-cell)
+  (org-defkey org-mode-map (kbd "C-c p") 'my-org-table-swap-prev-cell)
+  (setq org-export-html-style
+"<style type=\"text/css\">
+* { margin: 0; padding: 0; }
+html, body { height: 100%; }
+h1, h2, h3, h4, h5, h6 { font-size: 18px; font-weight: bold; letter-spacing: -1px; font-family: sans-serif; }
+h1 { margin-bottom: 1em; font-size: 24px; font-weight: bolder; }
+.title { font-size: 32px; }
+#content { text-align: justify; width: 52em; margin: 3em auto 2em auto; line-height: 1.5em; }
+.outline-1 { padding-left: 2em; margin-bottom: 2em; }
+.outline-text-1 { padding-left: 2em; }
+.outline-2 { padding-left: 2em; margin-bottom: 1em; }
+.outline-text-2 { padding-left: 2em; }
+.outline-3 { padding-left: 2em; margin-bottom: 1em; }
+.outline-text-3 { padding-left: 2em; }
+.outline-4 { padding-left: 2em; }
+</style>"))
 
 ;; Add function to swap orgmode table field with next/prev field
 (defun my-org-table-swap-next-cell ()
@@ -151,7 +169,7 @@
         (org-table-previous-field)
         (let ((org-table-clip second-clip))
           (org-table-paste-rectangle))))))
-(org-defkey org-mode-map (kbd "C-c n") 'my-org-table-swap-next-cell)
+
 (defun my-org-table-swap-prev-cell ()
   (interactive)
   (let ((org-table-clip nil))
@@ -165,7 +183,6 @@
         (org-table-next-field)
         (let ((org-table-clip second-clip))
           (org-table-paste-rectangle))))))
-(org-defkey org-mode-map (kbd "C-c p") 'my-org-table-swap-prev-cell)
 
 ;; Make #! scripts executable
 (add-hook 'after-save-hook
