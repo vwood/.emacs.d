@@ -142,7 +142,8 @@
 "<style type=\"text/css\">
 * { margin: 0; padding: 0; }
 html, body { height: 100%; }
-h1, h2, h3, h4, h5, h6 { font-size: 18px; font-weight: bold; letter-spacing: -1px; font-family: sans-serif; }
+h1, h2, h3, h4, h5, h6 { font-size: 18px; font-family: sans-serif; font-weight: normal; }
+h1, h2, h3 { letter-spacing: -1px; font-weight: bold; }
 h1 { margin-bottom: 1em; font-size: 24px; font-weight: bolder; }
 .title { font-size: 32px; }
 #content { text-align: justify; width: 52em; margin: 3em auto 2em auto; line-height: 1.5em; }
@@ -153,6 +154,7 @@ h1 { margin-bottom: 1em; font-size: 24px; font-weight: bolder; }
 .outline-3 { padding-left: 2em; margin-bottom: 1em; }
 .outline-text-3 { padding-left: 2em; }
 .outline-4 { padding-left: 2em; }
+li { margin-left: 1em; }
 </style>"))
 
 ;; Add function to swap orgmode table field with next/prev field
