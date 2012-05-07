@@ -154,7 +154,13 @@ h1 { margin-bottom: 1em; font-size: 24px; font-weight: bolder; }
 .outline-3 { padding-left: 2em; margin-bottom: 1em; }
 .outline-text-3 { padding-left: 2em; }
 .outline-4 { padding-left: 2em; }
+.done, .todo { font-weight: bold; letter-spacing: -1px; }
 li { margin-left: 1em; }
+table { border-collapase: collapse; }
+table, th, td { border: 1px solid white; border-left: 8px solid white; border-right: 8px solid white; }
+td { padding: 4px; }
+th { background-color: #F90; }
+tr:nth-child(2n) { background-color: #FF8; }
 </style>"))
 
 ;; Add function to swap orgmode table field with next/prev field
