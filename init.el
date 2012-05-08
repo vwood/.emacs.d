@@ -34,15 +34,14 @@
 
 ;; Fix tabs
 (let ((tab-size 4))
+  (add-hook 'c-initialization-hook
+            (lambda ()
+              (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   (add-hook 'c-mode-hook
             (lambda () 
-              (define-key c-mode-map "\C-m" 'newline-and-indent)
               (setq c-basic-offset tab-size
                     c-indent-level tab-size
                     tab-width tab-size)))
-  (add-hook 'java-mode-hook
-            (lambda () 
-              (define-key java-mode-map "\C-m" 'newline-and-indent)))
   (setq tab-width tab-size)
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width tab-size)
