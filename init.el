@@ -36,9 +36,10 @@
 (let ((tab-size 4))
   (add-hook 'c-mode-hook
             (lambda () 
-              (setq c-basic-offset tab-size)
-              (setq c-indent-level tab-size)
-              (setq tab-width tab-size)))
+              (define-key c-mode-map "\C-m" 'newline-and-indent)
+              (setq c-basic-offset tab-size
+                    c-indent-level tab-size
+                    tab-width tab-size)))
   (setq tab-width tab-size)
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width tab-size)
@@ -47,10 +48,14 @@
   (setq python-basic-offset tab-size)
   (setq python-guess-indent nil))
 
+;;; PYTHON
+;; Allow loading of local packages in run-python
+(setq python-remove-cwd-from-path nil)
 (add-hook 'python-mode-hook
 		 (lambda () 
-		   (setq indent-tabs-mode nil)
-		   (setq tab-width (default-value 'tab-width))))
+           (define-key python-mode-map "\C-m" 'newline-and-indent)
+		   (setq indent-tabs-mode nil
+                 tab-width (default-value 'tab-width))))
 
 ;; If we're on a windows machine - setup Cygwin
 (let* ((cygwin-root "c:/cygwin")
@@ -218,13 +223,6 @@ tr:nth-child(2n) { background-color: #FF8; }
      (remove-if-not 'buffer-modified-p (buffer-list)))))
 
 (global-set-key [?\M-o] 'rot-windows)
-
-;;; PYTHON
-;; Allow loading of local packages in run-python
-(setq python-remove-cwd-from-path nil)
-;; Autoindent on return (\C-m seems to mirror enter)
-(add-hook 'python-mode-hook
-          (lambda () (define-key python-mode-map "\C-m" 'newline-and-indent)))
 
 ;; I find myself doing this by habit, so also make vim work in eshell
 (defun eshell/vim (&rest args)
