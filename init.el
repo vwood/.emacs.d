@@ -151,9 +151,9 @@
 html, body { height: 100%; }
 h1, h2, h3, h4, h5, h6 { font-size: 18px; font-family: sans-serif; font-weight: normal; }
 h1, h2, h3 { letter-spacing: -1px; font-weight: bold; }
-h1, h2 { text-align: center; }
-h1 { margin-bottom: 1em; font-size: 24px; font-weight: bolder; }
-.title { font-size: 32px; }
+h1, h2 { text-align: center; font-size: 24px; }
+h1 { margin-bottom: 1em; font-size: 32px; font-weight: bolder; }
+.title { font-size: 36px; }
 #content { text-align: justify; width: 52em; margin: 3em auto 2em auto; line-height: 1.5em; }
 .outline-1 { margin-bottom: 2em; }
 .outline-2 { margin-bottom: 1em; }
