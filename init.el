@@ -519,3 +519,44 @@ tr:nth-child(2n) { background-color: #FF8; }
    ((= emacs-major-version 24) (eshell)) ; eshell impacts badly on run-python in emacs23
    (t (shell))))
 
+(setq enable-recursive-minibuffers t)
+
+(defun uniq (list)
+  "Return a copy of list where members only occur once."
+  (let ((result ()))
+    (dolist (item list)
+      (when (not (member item result))
+        (push item result)))
+    result))
+
+(defun solve (a b c)
+  "Solve a word equation of the form:
+ a + b = c,
+where each of a, b & c is a list of symbols.
+
+example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
+  (let ((values '(0 1 2 3 4 5 6 7 8 9))
+        (binding (uniq (append a b c)))
+        (bind-hash (make-hash-table))
+        (first-vars (mapcar 'car (list a b c))))
+    (labels
+        ((convert (list)
+                  (let ((result 0))
+                    (dolist (name list)
+                      (setq result (+ (* 10 result) (gethash name bind-hash))))
+                    result))
+         (solve1 (bindings-left values-left)
+                 (if (null bindings-left)
+                     (if (= (+ (convert a) (convert b)) (convert c))
+                         (loop for var in binding
+                               collecting (gethash var bind-hash))
+                       nil)
+                    (dolist (value (if (member (car bindings-left) first-vars)
+                                       (remove 0 values-left) 
+                                     values-left))
+                      (puthash (car bindings-left) value bind-hash)
+                      (let ((result (solve1 (rest bindings-left) (remove value values-left))))
+                        (when result (return (loop for var in binding
+                                                   collecting (cons var (gethash var bind-hash))))))))))
+      (solve1 binding values))))
+
