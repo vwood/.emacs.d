@@ -241,8 +241,9 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; Add C-x p to be the opposite of C-x o
 (defun prev-window()
   (interactive)
-  (other-window -1))
-(global-set-key [(control ?x) ?p] 'prev-window)
+  (other-window -1 t))
+(global-set-key [(control ?x) ?p] (lambda () (interactive) (other-window -1 t) (raise-frame)))
+(global-set-key [(control ?x) ?o] (lambda () (interactive) (other-window 1 t) (raise-frame)))
 
 ;; Make Term sane
 (require 'term)
