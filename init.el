@@ -242,6 +242,7 @@ tr:nth-child(2n) { background-color: #FF8; }
 (defun prev-window()
   (interactive)
   (other-window -1 t))
+;; These lambdas allow for the use of multiple frames via C-x 5 2
 (global-set-key [(control ?x) ?p] (lambda () (interactive) (other-window -1 t) (raise-frame)))
 (global-set-key [(control ?x) ?o] (lambda () (interactive) (other-window 1 t) (raise-frame)))
 
