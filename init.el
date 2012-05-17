@@ -480,15 +480,24 @@ tr:nth-child(2n) { background-color: #FF8; }
                   (interactive)
                   (revert-buffer t (not (buffer-modified-p)) t)))
 
+;; Prevent compilation buffer from showing up
+(defadvice compile (around compile/save-window-excursion first () activate)
+  (save-window-excursion ad-do-it))
 
-;; Compilation buffer is a waste of time if compilation was successful.
-;; I really want to prevent it from ever showing up
-(add-to-list 'compilation-finish-function 
-             (lambda (status code msg)
-               (when (and (eq status 'exit) (zerop code))
-                 (bury-buffer "*compilation*")
-                 (replace-buffer-in-windows "*compilation*"))
-               (cons msg code)))
+;; This buries the buffer when compilation finishes and is successful. (used if we disable the above advice)
+(add-to-list 'compilation-finish-functions
+             (lambda (buffer msg)
+               (when 
+                 (bury-buffer buffer)
+                 (replace-buffer-in-windows buffer))))
+
+(setq compilation-scroll-output 'first-error)
+
+(defun foo ()
+  (interactive)
+  (next-line))
+(defvar old-foo (symbol-function 'foo))
+(fset 'foo (lambda () (interactive) (save-excursion (funcall old-foo))))
 
 ;; Yasnippet
 (when (require 'yasnippet nil t)
