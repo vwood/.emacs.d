@@ -493,12 +493,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 (setq compilation-scroll-output 'first-error)
 
-(defun foo ()
-  (interactive)
-  (next-line))
-(defvar old-foo (symbol-function 'foo))
-(fset 'foo (lambda () (interactive) (save-excursion (funcall old-foo))))
-
 ;; Yasnippet
 (when (require 'yasnippet nil t)
   (yas/global-mode 1))
