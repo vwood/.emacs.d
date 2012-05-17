@@ -415,7 +415,14 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 (when (/= emacs-major-version 24)
     (defvar custom-theme-load-path nil)) ; work around color-theme-solarized recipe on emacs23
-(el-get 'sync '(workgroups graphviz-dot-mode markdown-mode color-theme color-theme-solarized haskell-mode yasnippet))
+(el-get 'sync '(workgroups
+                graphviz-dot-mode
+                markdown-mode
+                color-theme
+                color-theme-solarized
+                haskell-mode
+                mode-compile
+                yasnippet))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
