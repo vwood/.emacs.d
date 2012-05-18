@@ -572,3 +572,12 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                                                    collecting (cons var (gethash var bind-hash))))))))))
       (solve1 binding values))))
 
+
+;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
+(global-set-key '[(ctrl c) (ctrl %)]
+                (lambda () 
+                  (interactive)
+                  (add-to-list 'after-save-hook 
+                               (lambda () 
+                                 (flet ((read-string (&rest args) ""))
+                                   (mode-compile))))))
