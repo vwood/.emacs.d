@@ -590,6 +590,10 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                       (add-to-list 'after-save-hook 'mode-compile-quiet)
                       (message "Compiling after saving.")))))
 
+;; Name compilation buffer after the buffer name
+(setq compilation-buffer-name-function 
+      (lambda (mode) (concat "*" (downcase mode) ": " (buffer-name) "*")))
+
 ;; Search forward/backward for symbol at point
 (when (require 'smart-symbol nil t)
   (global-set-key '[(meta n)] 'smart-symbol-go-forward)
