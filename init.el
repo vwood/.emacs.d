@@ -581,3 +581,9 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                                (lambda () 
                                  (flet ((read-string (&rest args) ""))
                                    (mode-compile))))))
+
+;; Search forward/backward for symbol at point
+(when (require 'smart-symbol nil t)
+  (global-set-key '[(meta n)] 'smart-symbol-go-forward)
+  (global-set-key '[(meta p)] 'smart-symbol-go-backward))
+
