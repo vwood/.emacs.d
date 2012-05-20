@@ -574,16 +574,23 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
 
 
 ;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
+(defun mode-compile-quiet ()
+  (interactive)
+  (flet ((read-string (&rest args) ""))
+    (mode-compile)))
+
 (global-set-key '[(ctrl c) (ctrl %)]
                 (lambda () 
                   (interactive)
-                  (add-to-list 'after-save-hook 
-                               (lambda () 
-                                 (flet ((read-string (&rest args) ""))
-                                   (mode-compile))))))
+                  (if (member 'mode-compile-quiet after-save-hook)
+                      (progn
+                        (setq after-save-hook (remove 'mode-compile-quiet after-save-hook))
+                        (message "No longer compiling after saving."))
+                    (progn
+                      (add-to-list 'after-save-hook 'mode-compile-quiet)
+                      (message "Compiling after saving.")))))
 
 ;; Search forward/backward for symbol at point
 (when (require 'smart-symbol nil t)
   (global-set-key '[(meta n)] 'smart-symbol-go-forward)
   (global-set-key '[(meta p)] 'smart-symbol-go-backward))
-
