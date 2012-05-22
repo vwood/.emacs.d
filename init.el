@@ -327,8 +327,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
-      ido-everywhere t
       ido-auto-merge-delay-time 9999999) ; Prevents ido from deciding to look elsewhere
+(ido-everywhere t)
 (ido-mode 1)
 
 ;; Don't interupt displaying for input.
@@ -421,8 +421,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme
                 color-theme-solarized
                 haskell-mode
-                mode-compile
-                yasnippet))
+                mode-compile))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
@@ -500,10 +499,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 (setq compilation-scroll-output 'first-error)
 
-;; Yasnippet
-(when (require 'yasnippet nil t)
-  (yas/global-mode 1))
-
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
   (require 'color-theme-autoloads "color-theme-autoloads")
@@ -572,7 +567,6 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                                                    collecting (cons var (gethash var bind-hash))))))))))
       (solve1 binding values))))
 
-
 ;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
 (defun mode-compile-quiet ()
   (interactive)
@@ -590,6 +584,8 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                       (add-to-list 'after-save-hook 'mode-compile-quiet)
                       (message "Compiling after saving.")))))
 
+(global-set-key '[(ctrl c) (ctrl $)] 'mode-compile-quiet)
+
 ;; Name compilation buffer after the buffer name
 (setq compilation-buffer-name-function 
       (lambda (mode) (concat "*" (downcase mode) ": " (buffer-name) "*")))
@@ -598,3 +594,16 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
 (when (require 'smart-symbol nil t)
   (global-set-key '[(meta n)] 'smart-symbol-go-forward)
   (global-set-key '[(meta p)] 'smart-symbol-go-backward))
+
+;; Next buffer with the same mode
+(defun next-same-mode ()
+  (interactive)
+  (let ((mode major-mode)
+        (buffer-list (buffer-list)))
+    (switch-to-buffer
+     (or
+      (first (member-if (lambda (buffer)
+                          (eq (buffer-local-value 'major-mode buffer) mode))
+                        (append (rest buffer-list) (list (first buffer-list)))))))))
+
+(global-set-key '[(ctrl c) (b)] 'next-same-mode)
