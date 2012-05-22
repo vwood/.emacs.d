@@ -158,7 +158,9 @@ h1 { margin-bottom: 1em; font-size: 32px; font-weight: bolder; }
 .outline-1 { margin-bottom: 2em; }
 .outline-2 { margin-bottom: 1em; }
 .outline-3 { margin-bottom: 1em; }
+.outline-4 { margin-bottom: 1em; padding-left: 2em; }
 .outline-text-3 { padding-left: 2em; }
+.outline-text-4 { padding-left: 2em; }
 .done, .todo { font-weight: bold; letter-spacing: -1px; }
 li { margin-left: 1em; }
 table { border-collapase: collapse; margin: 0 auto; }
