@@ -181,7 +181,8 @@ tr:nth-child(2n) { background-color: #FF8; }
         (org-table-paste-rectangle)
         (org-table-previous-field)
         (let ((org-table-clip second-clip))
-          (org-table-paste-rectangle))))))
+          (org-table-paste-rectangle)
+          (org-table-next-field))))))
 
 (defun my-org-table-swap-prev-cell ()
   (interactive)
@@ -195,7 +196,8 @@ tr:nth-child(2n) { background-color: #FF8; }
         (org-table-paste-rectangle)
         (org-table-next-field)
         (let ((org-table-clip second-clip))
-          (org-table-paste-rectangle))))))
+          (org-table-paste-rectangle)
+          (org-table-previous-field))))))
 
 ;; Make #! scripts executable
 (add-hook 'after-save-hook
