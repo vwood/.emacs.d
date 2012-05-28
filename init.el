@@ -54,16 +54,16 @@
 ;; Allow loading of local packages in run-python
 (setq python-remove-cwd-from-path nil)
 (add-hook 'python-mode-hook
-		 (lambda () 
-           (define-key python-mode-map "\C-m" 'newline-and-indent)
-		   (setq indent-tabs-mode nil
-                 tab-width (default-value 'tab-width))))
+          (lambda () 
+            (define-key python-mode-map "\C-m" 'newline-and-indent)
+            (setq indent-tabs-mode nil
+                  tab-width (default-value 'tab-width))))
 
 ;; If we're on a windows machine - setup Cygwin
 (let* ((cygwin-root "c:/cygwin")
        (cygwin-bin (concat cygwin-root "/bin")))
   (when (and (eq 'windows-nt system-type)
-	     (file-readable-p cygwin-root))
+             (file-readable-p cygwin-root))
 
     ;; Add cygwin to path
     (setq exec-path (cons cygwin-bin exec-path))
@@ -332,8 +332,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
       ido-auto-merge-delay-time 9999999) ; Prevents ido from deciding to look elsewhere
-(ido-everywhere t)
 (ido-mode 1)
+(ido-everywhere t)
 
 ;; Don't interupt displaying for input.
 (setq redisplay-dont-pause t)
@@ -497,9 +497,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; This buries the buffer when compilation finishes and is successful. (used if we disable the above advice)
 (add-to-list 'compilation-finish-functions
              (lambda (buffer msg)
-               (when 
-                 (bury-buffer buffer)
-                 (replace-buffer-in-windows buffer))))
+               (bury-buffer buffer)
+               (replace-buffer-in-windows buffer)))
 
 (setq compilation-scroll-output 'first-error)
 
@@ -611,3 +610,6 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                         (append (rest buffer-list) (list (first buffer-list)))))))))
 
 (global-set-key '[(ctrl c) (b)] 'next-same-mode)
+
+;; Mostly to prevent M-! from using the minibuffer if output is small.
+(setf max-mini-window-height 0.1)
