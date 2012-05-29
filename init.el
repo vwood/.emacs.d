@@ -597,9 +597,9 @@ See variable compilation-error-regexp-alist for more details.")
   "Run `lisp-command' with `lisp-flags' on current-buffer (`lisp-mode')."
   (mc--shell-compile lisp-command lisp-flags lisp-compilation-error-regexp-alist))
 
-(require 'mode-compile)
-(add-to-list 'mode-compile-modes-alist
-             '(lisp-mode . (lisp-compile kill-compilation)))
+(eval-after-load  'mode-compile
+  (add-to-list 'mode-compile-modes-alist
+               '(lisp-mode . (lisp-compile kill-compilation))))
 
 (global-set-key '[(ctrl c) (c)] 'mode-compile-quiet)
 (global-set-key '[(ctrl c) (k)] 'mode-compile-kill)
