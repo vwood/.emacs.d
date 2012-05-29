@@ -1,3 +1,4 @@
+
 ;; 
 ;; On windows 
 ;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
@@ -494,12 +495,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 (defadvice compile (around compile/save-window-excursion first () activate)
   (save-window-excursion ad-do-it))
 
-;; This buries the buffer when compilation finishes and is successful. (used if we disable the above advice)
-(add-to-list 'compilation-finish-functions
-             (lambda (buffer msg)
-               (bury-buffer buffer)
-               (replace-buffer-in-windows buffer)))
-
 (setq compilation-scroll-output 'first-error)
 
 (global-font-lock-mode t)
@@ -587,7 +582,27 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                       (add-to-list 'after-save-hook 'mode-compile-quiet)
                       (message "Compiling after saving.")))))
 
-(global-set-key '[(ctrl c) (ctrl $)] 'mode-compile-quiet)
+(defvar lisp-command "sbcl" "command to compile lisp")
+(defvar lisp-flags "" "flags to compile lisp")
+(defvar lisp-compilation-error-regexp-alist
+  '(("^\\*\\*\\* - .*" nil))
+  "Alist that specifies how to match errors in lisp output.
+
+See variable compilation-error-regexp-alist for more details.")
+
+(when (eq 'windows-nt system-type)
+  (setq lisp-command "clisp"))
+
+(defun lisp-compile ()
+  "Run `lisp-command' with `lisp-flags' on current-buffer (`lisp-mode')."
+  (mc--shell-compile lisp-command lisp-flags lisp-compilation-error-regexp-alist))
+
+(require 'mode-compile)
+(add-to-list 'mode-compile-modes-alist
+             '(lisp-mode . (lisp-compile kill-compilation)))
+
+(global-set-key '[(ctrl c) (c)] 'mode-compile-quiet)
+(global-set-key '[(ctrl c) (k)] 'mode-compile-kill)
 
 ;; Name compilation buffer after the buffer name
 (setq compilation-buffer-name-function 
@@ -613,3 +628,20 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
 
 ;; Mostly to prevent M-! from using the minibuffer if output is small.
 (setf max-mini-window-height 0.1)
+
+;; Useful for Keyboard macros
+(defun foo () (interactive) (skip-chars-backward "-" (- (point) 1)))
+
+(defun increment-number-at-point (&optional arg)
+  "Increment number at point by 'arg'."
+  (interactive "p*")
+  (save-excursion
+    (save-match-data
+      (let ((inc-by (or arg 1))
+             answer)
+        (skip-chars-backward "0123456789")
+        (skip-chars-backward "-" (- (point) 1))
+        (or (looking-at "-?[0-9]+")
+            (error "No number at point"))
+        (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
+        (replace-match (format "%d" answer))))))
