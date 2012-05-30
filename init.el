@@ -499,7 +499,9 @@ tr:nth-child(2n) { background-color: #FF8; }
 (defadvice compile (around compile/save-window-excursion first () activate)
   (save-window-excursion ad-do-it))
 
-(setq compilation-scroll-output 'first-error)
+(setq compilation-scroll-output 'first-error
+      compilation-ask-about-save nil
+      compilation-save-buffers-predicate '(lambda () nil))
 
 (global-font-lock-mode t)
 (when (require 'color-theme nil t)
