@@ -426,7 +426,8 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme
                 color-theme-solarized
                 haskell-mode
-                mode-compile))
+                mode-compile
+                ess))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
@@ -593,7 +594,6 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
 (defvar lisp-compilation-error-regexp-alist
   '(("^\\*\\*\\* - .*" nil))
   "Alist that specifies how to match errors in lisp output.
-
 See variable compilation-error-regexp-alist for more details.")
 
 (when (eq 'windows-nt system-type)
@@ -603,9 +603,22 @@ See variable compilation-error-regexp-alist for more details.")
   "Run `lisp-command' with `lisp-flags' on current-buffer (`lisp-mode')."
   (mc--shell-compile lisp-command lisp-flags lisp-compilation-error-regexp-alist))
 
-(eval-after-load  'mode-compile
-  (add-to-list 'mode-compile-modes-alist
-               '(lisp-mode . (lisp-compile kill-compilation))))
+(defvar r-command "Rscript" "command to run R")
+(defvar r-flags "" "flags to run R")
+(defvar r-compilation-error-regexp-alist
+  '(("^Error: .*" nil))
+  "Alist that specifies how to match errors in R output.
+See variable compilation-error-regexp-alist for more details.")
+
+(defun r-compile ()
+  "Run `r-command' with `r-flags' on current-buffer (`ess-mode')."
+  (mc--shell-compile r-command r-flags r-compilation-error-regexp-alist))
+
+(eval-after-load 'mode-compile
+  '(setq mode-compile-modes-alist
+         (append  '((lisp-mode . (lisp-compile kill-compilation))
+                    (ess-mode . (r-compile kill-compilation)))
+                  mode-compile-modes-alist)))
 
 (global-set-key '[(ctrl c) (c)] 'mode-compile-quiet)
 (global-set-key '[(ctrl c) (k)] 'mode-compile-kill)
