@@ -252,13 +252,12 @@ tr:nth-child(2n) { background-color: #FF8; }
 (global-set-key [(control ?x) ?o] (lambda () (interactive) (other-window 1 t) (raise-frame)))
 
 ;; Make Term sane
-(require 'term)
-(term-set-escape-char ?\C-x) ; Make C-x consistent inside term windows
-(define-key term-raw-map "\C-c" 'term-interupt-subjob)
+(eval-after-load 'term
+  '(progn (term-set-escape-char ?\C-x) ; Make C-x consistent inside term windows
+          (define-key term-raw-map "\C-c" 'term-interupt-subjob)))
 
 ;; Replace yes with y
 (fset 'yes-or-no-p 'y-or-n-p)
-
 
 ;; Auto-complete where available...
 (when (require 'auto-complete-config nil t)
@@ -499,6 +498,9 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; Prevent compilation buffer from showing up
 (defadvice compile (around compile/save-window-excursion first () activate)
   (save-window-excursion ad-do-it))
+
+;; Prevent ERC reconnect from stealing focus
+(setq erc-join-buffer 'bury)
 
 (setq compilation-scroll-output 'first-error
       compilation-ask-about-save nil
