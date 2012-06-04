@@ -56,6 +56,9 @@
 (setq python-remove-cwd-from-path nil)
 (add-hook 'python-mode-hook
           (lambda () 
+            ;; Fix for archlinux
+            (when (eq 'gnu/linux system-type)
+              (setq python-command "python2"))
             (define-key python-mode-map "\C-m" 'newline-and-indent)
             (setq indent-tabs-mode nil
                   tab-width (default-value 'tab-width))))
@@ -461,10 +464,6 @@ tr:nth-child(2n) { background-color: #FF8; }
     (set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
 (when (eq 'gnu/linux system-type)
     (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
-
-;; Fix for archlinux
-(when (eq 'gnu/linux system-type)
-  (setq python-command "python2"))
 
 ;; Make the font size reasonable
 (set-face-attribute 'default nil :height 100)
