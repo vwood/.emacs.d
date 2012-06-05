@@ -427,9 +427,17 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
                 haskell-mode
                 mode-compile
+                powerline
                 ess))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
+
+(setq powerline-arrow-shape 'arrow
+      powerline-color1 "grey22"
+      powerline-color2 "grey40")
+(custom-set-faces
+ '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+ '(mode-line-inactive ((t (:foreground "#bdbdbd" :background "#030303" :box nil)))))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
