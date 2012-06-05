@@ -12,9 +12,6 @@
 ;; - Change "chromium" to desired browser
 ;;
 
-;; DISABLE TRAMP MODE
-(setq tramp-mode nil)
-
 ;; Access packages in .emacs.d
 (add-to-list 'load-path "~/.emacs.d")
 
@@ -334,6 +331,7 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; IDO makes changing buffers nicer
 (setq ido-enable-flex-matching t
+      ido-enable-tramp-completion nil    ; Tramp is slow to require, and has a noticable pause
       ido-auto-merge-delay-time 9999999) ; Prevents ido from deciding to look elsewhere
 (ido-mode 1)
 (ido-everywhere t)
