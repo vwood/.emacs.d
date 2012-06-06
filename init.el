@@ -1,4 +1,3 @@
-
 ;; 
 ;; On windows 
 ;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
@@ -427,21 +426,15 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
                 haskell-mode
                 mode-compile
-                powerline
                 ess))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
-(setq powerline-arrow-shape 'arrow
-      powerline-color1 "grey22"
-      powerline-color2 "grey40")
-(custom-set-faces
- '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
- '(mode-line-inactive ((t (:foreground "#bdbdbd" :background "#030303" :box nil)))))
-
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
     (progn 
+      (fset 'wg-mode-line-add-display (lambda () nil))
+      (fset 'wg-mode-line-remove-display (lambda () nil))
       (global-set-key (kbd "C-\\") nil)
       (setq wg-prefix-key (kbd "C-\\")) ; Match escreen keybindings
       (workgroups-mode 1)
