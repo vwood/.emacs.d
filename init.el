@@ -294,7 +294,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; Configure ERC
 (setq erc-nick "scombinator"
       erc-user-full-name "λ xyz.xz(yz)"
-      erc-hide-list '("JOIN" "PART" "QUIT")) ; Don't notify on join/part/quit
+      erc-hide-list '("JOIN" "PART" "QUIT") ; Don't notify on join/part/quit
+      erc-server-auto-reconnect nil) ; auto-reconnect disobeys options and locks emacs if no connection is available
 
 ;; Common Lisp Indentation rules != ELISP rules
 (add-hook 'lisp-mode-hook
@@ -496,9 +497,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; Prevent compilation buffer from showing up
 (defadvice compile (around compile/save-window-excursion first () activate)
   (save-window-excursion ad-do-it))
-
-;; Prevent ERC reconnect from stealing focus
-(setq erc-join-buffer 'bury)
 
 (setq compilation-scroll-output 'first-error
       compilation-ask-about-save nil
