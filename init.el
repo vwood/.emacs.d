@@ -21,6 +21,9 @@
 (menu-bar-mode -1)
 (setq inhibit-splash-screen t)
 
+;; Bar cursor is correct style of cursor to use. Point is *between* characters.
+(setq-default cursor-type 'bar)
+
 ;; Always use CommonLisp extensions
 (require 'cl)
 
