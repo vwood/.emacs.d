@@ -430,7 +430,8 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
                 haskell-mode
                 mode-compile
-                ess))
+                ess
+                tuareg-mode))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
@@ -469,7 +470,7 @@ tr:nth-child(2n) { background-color: #FF8; }
     (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
 
 ;; Make the font size reasonable
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 90)
 
 ;; Rid us of the disabled C-x C-n command, if I want to use that then M-x is fine
 (global-set-key (kbd "C-x C-n") nil)
@@ -665,3 +666,6 @@ See variable compilation-error-regexp-alist for more details.")
             (error "No number at point"))
         (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
         (replace-match (format "%d" answer))))))
+
+(when (require 'ess-site nil t)
+  (setq inferior-R-program-name "R"))
