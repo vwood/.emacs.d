@@ -42,7 +42,11 @@
               (setq c-basic-offset tab-size
                     c-indent-level tab-size
                     tab-width tab-size)))
-  (setq tab-width tab-size)
+  (setq c-default-style '((java-mode . "java")
+                          (awk-mode . "awk")
+                          (other . "linux")))
+  (setq-default tab-width tab-size)
+  (setq c-basic-offset tab-size)
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width tab-size)
   (setq-default python-indent tab-size)
@@ -651,8 +655,6 @@ See variable compilation-error-regexp-alist for more details.")
 (setf max-mini-window-height 0.1)
 
 ;; Useful for Keyboard macros
-(defun foo () (interactive) (skip-chars-backward "-" (- (point) 1)))
-
 (defun increment-number-at-point (&optional arg)
   "Increment number at point by 'arg'."
   (interactive "p*")
@@ -666,6 +668,8 @@ See variable compilation-error-regexp-alist for more details.")
             (error "No number at point"))
         (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
         (replace-match (format "%d" answer))))))
+
+(defun 2* (n) (* 2 n))
 
 (when (require 'ess-site nil t)
   (setq inferior-R-program-name "R"))
