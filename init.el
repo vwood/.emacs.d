@@ -11,6 +11,9 @@
 ;; - Change "chromium" to desired browser
 ;;
 
+;; Disable tramp mode to prevent loading for completions (that effectively halt emacs)
+(setq tramp-mode nil)
+
 ;; Access packages in .emacs.d
 (add-to-list 'load-path "~/.emacs.d")
 
@@ -435,7 +438,8 @@ tr:nth-child(2n) { background-color: #FF8; }
                 haskell-mode
                 mode-compile
                 ess
-                tuareg-mode))
+                tuareg-mode
+                nxhtml))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
