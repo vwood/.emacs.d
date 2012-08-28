@@ -582,12 +582,13 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                                                    collecting (cons var (gethash var bind-hash))))))))))
       (solve1 binding values))))
 
-;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
+
 (defun mode-compile-quiet ()
   (interactive)
   (flet ((read-string (&rest args) ""))
     (mode-compile)))
 
+;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
 (global-set-key '[(ctrl c) (ctrl %)]
                 (lambda () 
                   (interactive)
@@ -673,7 +674,44 @@ See variable compilation-error-regexp-alist for more details.")
         (setq answer (+ (string-to-number (match-string 0) 10) inc-by))
         (replace-match (format "%d" answer))))))
 
-(defun 2* (n) (* 2 n))
+(defun 2* (n) 
+  "Helper, just as useful as 1+"
+  (* 2 n))
 
 (when (require 'ess-site nil t)
   (setq inferior-R-program-name "R"))
+
+(setq minibuffer-prompt-properties
+       (plist-put minibuffer-prompt-properties 'point-entered 'minibuffer-avoid-prompt))
+
+(auto-image-file-mode 1)
+
+(iimage-mode)
+
+(defun refresh-iimages ()
+  "Only way I've found to refresh iimages (without also recentering)"
+  (interactive)
+  (clear-image-cache nil)
+  (iimage-mode nil)
+  (iimage-mode t))
+
+(add-to-list 'compilation-finish-functions 
+             (lambda (buffer msg)
+               (save-excursion
+                 (set-buffer buffer)
+                 (refresh-iimages))))
+
+(defvar censor-face
+  '(:foreground "black" :background "black")
+  "Face to use for censoring")
+
+(defun censor ()
+  "Censor the current region"
+  (interactive)
+  (let ((overlay (make-overlay (region-beginning) (region-end))))
+        (overlay-put overlay 'face censor-face)))
+
+(defun censor-remove ()
+  "Uncensor the current region"
+  (interactive)
+  (remove-overlays (region-beginning) (region-end) 'face censor-face))
