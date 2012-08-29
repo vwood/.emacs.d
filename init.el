@@ -541,8 +541,6 @@ tr:nth-child(2n) { background-color: #FF8; }
    ((= emacs-major-version 24) (eshell)) ; eshell impacts badly on run-python in emacs23
    (t (shell))))
 
-(setq enable-recursive-minibuffers t)
-
 (defun uniq (list)
   "Return a copy of list where members only occur once."
   (let ((result ()))
