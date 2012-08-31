@@ -505,6 +505,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                   "Revert the current buffer, prompting if modified."
                   (interactive)
                   (revert-buffer t (not (buffer-modified-p)) t)))
+(global-set-key '[(ctrl f5)] 'auto-revert-mode)
 
 ;; Prevent compilation buffer from showing up
 (defadvice compile (around compile/save-window-excursion first () activate)
