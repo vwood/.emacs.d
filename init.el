@@ -714,3 +714,11 @@ See variable compilation-error-regexp-alist for more details.")
   "Uncensor the current region"
   (interactive)
   (remove-overlays (region-beginning) (region-end) 'face censor-face))
+
+;; C-g quits minibuffer command prompts from anywhere
+(global-set-key [(control ?g)] 
+                (lambda () 
+                  (interactive) 
+                  (abort-recursive-edit)
+                  (keyboard-quit)))
+
