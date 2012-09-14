@@ -715,10 +715,13 @@ See variable compilation-error-regexp-alist for more details.")
   (interactive)
   (remove-overlays (region-beginning) (region-end) 'face censor-face))
 
-;; C-g quits minibuffer command prompts from anywhere
-(global-set-key [(control ?g)] 
-                (lambda () 
-                  (interactive) 
-                  (abort-recursive-edit)
-                  (keyboard-quit)))
-
+(defun seq (start &optional end increment)
+  "Helper function for getting sequences of numbers."
+  (let ((end (or end start))
+        (increment (abs (or increment 1)))
+        (start (if end start 0)))
+    (if (> end start)
+        (loop for x from start below end by increment
+              collect x)
+        (loop for x downfrom start above end by increment
+              collect x))))
