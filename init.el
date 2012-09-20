@@ -278,7 +278,8 @@ tr:nth-child(2n) { background-color: #FF8; }
   (let* ((cygwin-root "c:/cygwin"))
          (when (and (eq 'windows-nt system-type)
                     (file-readable-p cygwin-root))
-           (setq ac-ignores (list "//"))))
+           ; These ignores prevent searching around the network.
+           (setq ac-ignores (list "//" "///" "////" "/////"))))
 
   (setq ac-quick-help-delay 0.8
         ac-candidate-limit 20)
