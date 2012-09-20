@@ -439,6 +439,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 mode-compile
                 ess
                 tuareg-mode
+                go-mode
                 nxhtml))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
@@ -624,10 +625,21 @@ See variable compilation-error-regexp-alist for more details.")
   "Run `r-command' with `r-flags' on current-buffer (`ess-mode')."
   (mc--shell-compile r-command r-flags r-compilation-error-regexp-alist))
 
+(defvar go-command "go" "command to run go")
+(defvar go-flags "run" "flags to run go")
+(defvar go-compilation-error-regexp-alist
+  '(("^\\(.+\\):\\([[:digit:]]+\\): \\(.+\\): .*$" 1 2 nil 1))
+  "Alist that specifies how to match errors in go-compile output.
+See variable compilation-error-regexp-alist for more details.")
+(defun go-compile ()
+  "Run `go-command' with `go-flags' on current-buffer (`go-mode')."
+  (mc--shell-compile go-command go-flags go-compilation-error-regexp-alist))
+
 (eval-after-load 'mode-compile
   '(setq mode-compile-modes-alist
          (append  '((lisp-mode . (lisp-compile kill-compilation))
-                    (ess-mode . (r-compile kill-compilation)))
+                    (ess-mode . (r-compile kill-compilation))
+                    (go-mode . (go-compile kill-compilation)))
                   mode-compile-modes-alist)))
 
 (global-set-key '[(ctrl c) (c)] 'mode-compile-quiet)
