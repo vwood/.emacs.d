@@ -738,3 +738,6 @@ See variable compilation-error-regexp-alist for more details.")
               collect x)
         (loop for x downfrom start above end by increment
               collect x))))
+
+(eval-after-load 're-builder
+  '(setq reb-re-syntax 'string))
