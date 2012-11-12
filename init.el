@@ -121,6 +121,9 @@
 (add-to-list 'auto-mode-alist '("\\.l\\'" . fundamental-mode))
 (add-to-list 'auto-mode-alist '("\\.y\\'" . fundamental-mode))
 
+;; Use XML mode for XSLT
+(add-to-list 'auto-mode-alist '("\\.xslt\\'" . nxml-mode))
+
 ;; Hide emacs turds
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
@@ -438,7 +441,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
                 haskell-mode
                 mode-compile
-                ess
+;                ess
                 tuareg-mode
                 go-mode
                 nxhtml))
@@ -480,7 +483,7 @@ tr:nth-child(2n) { background-color: #FF8; }
     (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
 
 ;; Make the font size reasonable
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 100)
 
 ;; Rid us of the disabled C-x C-n command, if I want to use that then M-x is fine
 (global-set-key (kbd "C-x C-n") nil)
