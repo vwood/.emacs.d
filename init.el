@@ -1,3 +1,4 @@
+
 ;; 
 ;; On windows 
 ;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
@@ -41,10 +42,10 @@
             (lambda ()
               (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   (add-hook 'c-mode-hook
-            (lambda () 
-              (setq c-basic-offset tab-size
-                    c-indent-level tab-size
-                    tab-width tab-size)))
+            `(lambda ()
+              (setq c-basic-offset ,tab-size
+                    c-indent-level ,tab-size
+                    tab-width ,tab-size)))
   (setq c-default-style '((java-mode . "java")
                           (awk-mode . "awk")
                           (other . "linux")))
@@ -56,6 +57,8 @@
   (setq-default py-indent-offset tab-size)
   (setq python-basic-offset tab-size)
   (setq python-guess-indent nil))
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;;; PYTHON
 ;; Allow loading of local packages in run-python
@@ -120,6 +123,9 @@
 ;; Provide LEX & YACC 'MODES'
 (add-to-list 'auto-mode-alist '("\\.l\\'" . fundamental-mode))
 (add-to-list 'auto-mode-alist '("\\.y\\'" . fundamental-mode))
+
+;; Use js-mode for json
+(add-to-list 'auto-mode-alist '("\\.json\\'" . js-mode))
 
 ;; Hide emacs turds
 (setq backup-directory-alist
@@ -299,8 +305,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 (setq column-number-mode t)
 
 ;; UTF-8
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
+(prefer-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
 
 ;; Configure ERC
 (setq erc-nick "scombinator"
