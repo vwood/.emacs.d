@@ -92,7 +92,7 @@
       (setq default-directory (getenv "WORKSPACE")))
 
     ;; NTEmacs can't seem to follow the link in cygwin
-    (setq python-python-command "python2.6")
+    (setq python-python-command "python2.7")
 
     (setq eshell-force-execution t)
 
@@ -135,6 +135,23 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+
+;;; Makefiles need hard TABS
+(add-hook 'makefile-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode t)
+            (setq-default indent-tabs-mode t)
+            (setq tab-width 4)))
+(add-hook 'makefile-gmake-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode t)
+            (setq-default indent-tabs-mode t)
+            (setq tab-width 4)))            
+(add-hook 'before-save-hook
+          (lambda ()
+            (if (member major-mode '(makefile-mode makefile-gmake-mode))
+                (tabify (point-min) (point-max)))))
 
 ;; ORG-MODE
 (when (require 'org-install nil t)
@@ -436,6 +453,11 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 (when (/= emacs-major-version 24)
     (defvar custom-theme-load-path nil)) ; work around color-theme-solarized recipe on emacs23
+
+(setq el-get-sources
+      '((:name restclient :type git :url "https://github.com/pashky/restclient.el.git")))
+
+
 (el-get 'sync '(workgroups
                 graphviz-dot-mode
                 markdown-mode
@@ -443,12 +465,16 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
                 haskell-mode
                 mode-compile
-;                ess
+                ess
                 tuareg-mode
                 go-mode
+                restclient
                 nxhtml))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
+
+;; Associate .http with RESTclient
+(add-to-list 'auto-mode-alist '("\\.http" . restclient-mode))
 
 ;; Use workgroups if available, otherwise try escreen ...
 (if (require 'workgroups nil t)
