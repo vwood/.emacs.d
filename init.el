@@ -28,6 +28,8 @@
 ;; Bar cursor is correct style of cursor to use. Point is *between* characters.
 (setq-default cursor-type 'bar)
 
+(setq initial-scratch-message nil)
+
 ;; Always use CommonLisp extensions
 (require 'cl)
 
