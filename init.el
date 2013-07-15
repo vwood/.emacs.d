@@ -320,7 +320,7 @@ tr:nth-child(2n) { background-color: #FF8; }
     (define-key ac-complete-mode-map (kbd "<C-return>") 'ac-complete)))
 
 ;; Someone kill the inventor of this
-(when (= emacs-major-version 24)
+(when (fboundp 'set-message-beep)
   (set-message-beep 'silent))
 
 ;; Always show the column number
@@ -346,7 +346,7 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; In linux (without w3m's override below) use chromium
 (when (eq 'gnu/linux system-type)
     (setq browse-url-browser-function 'browse-url-generic
-          browse-url-generic-program "chromium"))
+          browse-url-generic-program "firefox"))
 
 ;; Start w3m when available
 ;; W3M keys: 
@@ -465,7 +465,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 markdown-mode
                 color-theme
                 color-theme-solarized
-                haskell-mode
+;                haskell-mode
                 mode-compile
                 ess
                 tuareg-mode
@@ -474,6 +474,9 @@ tr:nth-child(2n) { background-color: #FF8; }
                 nxhtml))
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
+
+;; Disable _ becoming <- in ess. Don't have this in muscle memory and always use _ in var names
+(ess-toggle-underscore nil)
 
 ;; Associate .http with RESTclient
 (add-to-list 'auto-mode-alist '("\\.http" . restclient-mode))
@@ -774,3 +777,12 @@ See variable compilation-error-regexp-alist for more details.")
 
 (eval-after-load 're-builder
   '(setq reb-re-syntax 'string))
+
+;; Workaround annoying warnings:
+;;    Warning (mumamo-per-buffer-local-vars):
+;;    Already 'permanent-local t: buffer-file-name
+(when (and (>= emacs-major-version 24)
+           (>= emacs-minor-version 2))
+  (eval-after-load "mumamo"
+    '(setq mumamo-per-buffer-local-vars
+           (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
