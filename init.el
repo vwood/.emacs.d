@@ -469,6 +469,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 mode-compile
                 ess
                 tuareg-mode
+                ein
                 go-mode
                 restclient
                 nxhtml))
@@ -786,3 +787,28 @@ See variable compilation-error-regexp-alist for more details.")
   (eval-after-load "mumamo"
     '(setq mumamo-per-buffer-local-vars
            (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
+
+
+;;; NZ tax calculations
+(defun calc-taxes (income)
+  "Tax rates circa 2013"
+  (if (< income 14000)
+      (* 0.105 income)
+    (if (< income 48000)
+        (+ (* 0.175 (- income 14000)) 
+           (* 0.105 14000))
+      (if (< income 70000)
+          (+ (* 0.30 (- income 48000))
+             (* 0.175 (- 48000 14000)) 
+             (* 0.105 14000))
+        (+ (* 0.33 (- income 70000))
+           (* 0.30 (- 70000 48000))
+           (* 0.175 (- 48000 14000)) 
+           (* 0.105 14000))))))
+
+(defun calc-sub-taxes (income)
+  (- income (calc-taxes income)))
+
+(setq scroll-step 1)
+(setq scroll-conservatively 101)
+(setq auto-window-vscroll nil)
