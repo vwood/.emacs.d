@@ -467,7 +467,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
 ;                haskell-mode
                 mode-compile
-                ess
+                ;ess
                 tuareg-mode
                 ein
                 go-mode
@@ -477,7 +477,8 @@ tr:nth-child(2n) { background-color: #FF8; }
   (add-to-list 'load-path (first custom-theme-load-path)))
 
 ;; Disable _ becoming <- in ess. Don't have this in muscle memory and always use _ in var names
-(ess-toggle-underscore nil)
+; TODO: Check ess is loaded
+;(ess-toggle-underscore nil)
 
 ;; Associate .http with RESTclient
 (add-to-list 'auto-mode-alist '("\\.http" . restclient-mode))
@@ -578,8 +579,9 @@ tr:nth-child(2n) { background-color: #FF8; }
   (cond 
    ((file-exists-p wg-local) (wg-load wg-local))
    ((file-exists-p wg-location) (wg-load wg-location))
-   ((= emacs-major-version 24) (eshell)) ; eshell impacts badly on run-python in emacs23
-   (t (shell))))
+;   ((= emacs-major-version 24) (eshell)) ; eshell impacts badly on run-python in emacs23
+;   (t (shell))
+))
 
 (defun uniq (list)
   "Return a copy of list where members only occur once."
@@ -812,3 +814,20 @@ See variable compilation-error-regexp-alist for more details.")
 (setq scroll-step 1)
 (setq scroll-conservatively 101)
 (setq auto-window-vscroll nil)
+(setq transient-mark-mode t)
+
+
+;; Toggle window dedication
+(defun toggle-window-dedicated ()
+  "Toggle whether the current active window is dedicated or not"
+  (interactive)
+  (message 
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window 
+                                 (not (window-dedicated-p window))))
+       "Window '%s' is dedicated"
+     "Window '%s' is normal")
+   (current-buffer)))
+
+;; TODO - bind to a real key
+(global-set-key [?\C-=] 'toggle-window-dedicated)
