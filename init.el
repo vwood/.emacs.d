@@ -467,6 +467,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 color-theme-solarized
 ;                haskell-mode
                 mode-compile
+                erlang-mode
                 ;ess
                 tuareg-mode
                 ein
@@ -679,6 +680,7 @@ See variable compilation-error-regexp-alist for more details.")
   '(setq mode-compile-modes-alist
          (append  '((lisp-mode . (lisp-compile kill-compilation))
                     (ess-mode . (r-compile kill-compilation))
+                    (erlang-mode . (erlang-compile kill-compilation))
                     (go-mode . (go-compile kill-compilation)))
                   mode-compile-modes-alist)))
 
@@ -831,3 +833,13 @@ See variable compilation-error-regexp-alist for more details.")
 
 ;; TODO - bind to a real key
 (global-set-key [?\C-=] 'toggle-window-dedicated)
+
+(defun increment-region-indent ()
+  (interactive)
+  (indent-rigidly (region-beginning) (region-end) tab-width))
+(defun decrement-region-indent ()
+  (interactive)
+  (indent-rigidly (region-beginning) (region-end) (- tab-width)))
+
+(global-set-key [?\C-,] 'decrement-region-indent)
+(global-set-key [?\C-.] 'increment-region-indent)
