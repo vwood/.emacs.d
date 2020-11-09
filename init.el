@@ -1,4 +1,3 @@
-
 ;; 
 ;; On windows 
 ;; - Add /cygwin/c/PATH_TO_EMACS_ETC to $PYTHONPATH
@@ -12,11 +11,11 @@
 ;; - Change "chromium" to desired browser
 ;;
 
-;; Disable tramp mode to prevent loading for completions (that effectively halt emacs)
+;; Disable tramp mode to prevent loading for completions (that effectively halt emacs to search the network)
 (setq tramp-mode nil)
 
 ;; Access packages in .emacs.d
-(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;; Remove clutter
 (when window-system
@@ -29,14 +28,15 @@
 (setq-default cursor-type 'bar)
 
 (setq initial-scratch-message nil)
+(setq indicate-empty-lines t)
 
 ;; Always use CommonLisp extensions
 (require 'cl)
 
 ;; Paren highlighting
 (show-paren-mode 1)
-; (setq show-paren-style 'parenthesis) ; Highlight just parens
-(setq show-paren-style 'expression) ; Highlight entire expression
+(setq show-paren-style 'parenthesis) ; Highlight just parens
+;(setq show-paren-style 'expression) ; Highlight entire expression
 
 ;; Fix tabs
 (let ((tab-size 4))
@@ -69,7 +69,7 @@
           (lambda () 
             ;; Fix for archlinux
             (when (eq 'gnu/linux system-type)
-              (setq python-command "python2"))
+              (setq python-command "python3"))
             (define-key python-mode-map "\C-m" 'newline-and-indent)
             (setq indent-tabs-mode nil
                   tab-width (default-value 'tab-width))))
@@ -181,8 +181,8 @@
                             (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
    remember-annotation-functions '(org-remember-annotation)
    remember-handler-functions '(org-remember-handler))
-  (org-defkey org-mode-map (kbd "C-c n") 'my-org-table-swap-next-cell)
-  (org-defkey org-mode-map (kbd "C-c p") 'my-org-table-swap-prev-cell)
+  ;(org-defkey org-mode-map (kbd "C-c n") 'my-org-table-swap-next-cell)
+  ;(org-defkey org-mode-map (kbd "C-c p") 'my-org-table-swap-prev-cell)
   (setq org-export-html-style
 "<style type=\"text/css\">
 * { margin: 0; padding: 0; }
@@ -298,8 +298,15 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; Auto-complete where available...
 (when (require 'auto-complete-config nil t)
+
+  (define-key ac-completing-map [return] nil)
+  (define-key ac-completing-map "\r" nil)
+  
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (ac-config-default)
+
+  (define-key ac-completing-map [return] nil)
+  (define-key ac-completing-map "\r" nil)
 
   ;; Auto-complete-mode + cygwin-mount + network mounts = frozen emacs
   ;; Define cygwin-root earlier (in a single place)
@@ -315,11 +322,17 @@ tr:nth-child(2n) { background-color: #FF8; }
   ;; Stop stealing RETURN, (use C-RET / M-RET instead)
   ;; This is irritating when it completes and you want to get on with the next line
   (define-key ac-complete-mode-map "\r" nil)
+  (define-key ac-complete-mode-map [return] nil)
+  
   (if (eq window-system nil)
       (define-key ac-complete-mode-map (kbd "<M-return>") 'ac-complete)
-    (define-key ac-complete-mode-map (kbd "<C-return>") 'ac-complete)))
+    (define-key ac-complete-mode-map (kbd "<C-return>") 'ac-complete))
 
-;; Someone kill the inventor of this
+  (define-key ac-completing-map [return] nil)
+  (define-key ac-completing-map "\r" nil))
+
+
+;; Why would anyone want it to beep - seriously?
 (when (fboundp 'set-message-beep)
   (set-message-beep 'silent))
 
@@ -343,7 +356,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                  'common-lisp-indent-function)))
 
 
-;; In linux (without w3m's override below) use chromium
+;; In linux (without w3m's override below) use a good browser
 (when (eq 'gnu/linux system-type)
     (setq browse-url-browser-function 'browse-url-generic
           browse-url-generic-program "firefox"))
@@ -377,14 +390,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; Don't interupt displaying for input.
 (setq redisplay-dont-pause t)
-
-;; Silliness - from #emacs
-(defun is-this-for-that ()
-  (interactive)
-  (with-temp-buffer
-    (url-insert-file-contents
-     "http://itsthisforthat.com/api.php?text") (buffer-substring
-     (point-min)(point-max))))
 
 ;; SQLITE DBS do not have an extension!
 (setq sql-sqlite-login-params '((database :file "([^\\.]*\\|.*\\.\\(db\\|sqlite[23]?\\)\\)")))
@@ -421,7 +426,7 @@ tr:nth-child(2n) { background-color: #FF8; }
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-strip-common-suffix t)
 
-;; Make ediff saner, it's still bad
+;; Make ediff saner, it's still very very bad
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -438,8 +443,7 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; Setup RSS feeds
 ;; Open newsticker with M-x newsticker-show-news
-(setq newsticker-url-list '(("Stuff" "http://stuff.co.nz/rss/" nil nil nil)
-                            ("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
+(setq newsticker-url-list '(("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
 (setq newsticker-frontend 'newsticker-plainview)
 
 ;; Use el-get, Downloading it if needed, (ensure gnutls is installed in windows)
@@ -460,20 +464,26 @@ tr:nth-child(2n) { background-color: #FF8; }
       '((:name restclient :type git :url "https://github.com/pashky/restclient.el.git")))
 
 
-(el-get 'sync '(workgroups
+(el-get 'sync '(;workgroups
                 graphviz-dot-mode
                 markdown-mode
+                anaphora
                 color-theme
                 color-theme-solarized
 ;                haskell-mode
                 mode-compile
                 erlang-mode
+                yaml-mode
+                terraform-mode
                 ;ess
                 tuareg-mode
-                ein
+                rust-mode
                 go-mode
                 restclient
-                nxhtml))
+                ;nxhtml
+                ))
+
+
 (when (/= emacs-major-version 24)
   (add-to-list 'load-path (first custom-theme-load-path)))
 
@@ -501,11 +511,20 @@ tr:nth-child(2n) { background-color: #FF8; }
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 
+;; Fix for changes to solarized changing API
+(defun set-solarized-light ()
+  (customize-set-variable 'frame-background-mode 'light)
+  (load-theme 'solarized t))
+
+(defun set-solarized-dark ()
+  (customize-set-variable 'frame-background-mode 'dark)
+  (load-theme 'solarized t))
+
 ;; Toggle between dark and night
 (defun update-color-theme ()
   (if color-theme-is-dark
       (funcall color-theme-dark-theme)
-      (funcall color-theme-light-theme)))
+    (funcall color-theme-light-theme)))
 
 (defun toggle-color-theme ()
   (interactive)
@@ -514,12 +533,14 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; system specific fonts
 (when (eq 'windows-nt system-type)
-    (set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
+    (set-frame-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1" t t))
 (when (eq 'gnu/linux system-type)
-    (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1"))
+  ;(set-frame-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1" t t))
+  ;(set-frame-font "-PfEd-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1" t t))
+  (set-frame-font "-PfEd-Ricty Diminished-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1"  t t))
 
 ;; Make the font size reasonable
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 120)
 
 ;; Rid us of the disabled C-x C-n command, if I want to use that then M-x is fine
 (global-set-key (kbd "C-x C-n") nil)
@@ -561,8 +582,8 @@ tr:nth-child(2n) { background-color: #FF8; }
   (require 'color-theme-autoloads "color-theme-autoloads")
   (color-theme-initialize)
   (if (require 'color-theme-solarized nil t)
-      (setq color-theme-dark-theme 'color-theme-solarized-dark
-            color-theme-light-theme 'color-theme-solarized-light)
+      (setq color-theme-dark-theme 'set-solarized-dark
+            color-theme-light-theme 'set-solarized-light)
     (setq color-theme-dark-theme 'color-theme-charcoal-black
           color-theme-light-theme 'color-theme-vim-colors))
   (setq color-theme-is-dark nil
@@ -602,7 +623,7 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
         (binding (uniq (append a b c)))
         (bind-hash (make-hash-table))
         (first-vars (mapcar 'car (list a b c))))
-    (labels
+    (cl-labels
         ((convert (list)
                   (let ((result 0))
                     (dolist (name list)
@@ -623,10 +644,11 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                                                    collecting (cons var (gethash var bind-hash))))))))))
       (solve1 binding values))))
 
-
+;; I have never ever wanted mode-compile to ask for arguments
 (defun mode-compile-quiet ()
   (interactive)
-  (flet ((read-string (&rest args) ""))
+  ; Deprecating flet was a pointlessly bad decision
+  (cl-letf (((symbol-function 'read-string) (lambda (&rest args) "")))
     (mode-compile)))
 
 ;; C-c C-% will set a buffer local hook to use mode-compile after saving the file
@@ -640,6 +662,17 @@ example: (solve '(s e n d) '(m o r e) '(m o n e y)) "
                     (progn
                       (add-to-list 'after-save-hook 'mode-compile-quiet)
                       (message "Compiling after saving.")))))
+
+(defvar rust-command "cargo" "command to compile rust")
+(defvar rust-flags "check" "flags to compile rust")
+(defvar rust-compilation-error-regexp-alist
+  '(("^error[^:]*:" nil))
+  "Alist that specifies how to match errors in rust output.
+See variable compilation-error-regexp-alist for more details.")
+(defun rust-compile ()
+  "Run `rust-command' with `rust-flags' on current-buffer (`rust-mode')."
+  (mc--shell-compile rust-command rust-flags rust-compilation-error-regexp-alist))
+
 
 (defvar lisp-command "sbcl" "command to compile lisp")
 (defvar lisp-flags "" "flags to compile lisp")
@@ -679,6 +712,7 @@ See variable compilation-error-regexp-alist for more details.")
 (eval-after-load 'mode-compile
   '(setq mode-compile-modes-alist
          (append  '((lisp-mode . (lisp-compile kill-compilation))
+                    (rust-mode . (rust-compile kill-compilation))
                     (ess-mode . (r-compile kill-compilation))
                     (erlang-mode . (erlang-compile kill-compilation))
                     (go-mode . (go-compile kill-compilation)))
@@ -792,27 +826,6 @@ See variable compilation-error-regexp-alist for more details.")
     '(setq mumamo-per-buffer-local-vars
            (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
 
-
-;;; NZ tax calculations
-(defun calc-taxes (income)
-  "Tax rates circa 2013"
-  (if (< income 14000)
-      (* 0.105 income)
-    (if (< income 48000)
-        (+ (* 0.175 (- income 14000)) 
-           (* 0.105 14000))
-      (if (< income 70000)
-          (+ (* 0.30 (- income 48000))
-             (* 0.175 (- 48000 14000)) 
-             (* 0.105 14000))
-        (+ (* 0.33 (- income 70000))
-           (* 0.30 (- 70000 48000))
-           (* 0.175 (- 48000 14000)) 
-           (* 0.105 14000))))))
-
-(defun calc-sub-taxes (income)
-  (- income (calc-taxes income)))
-
 (setq scroll-step 1)
 (setq scroll-conservatively 101)
 (setq auto-window-vscroll nil)
@@ -843,3 +856,40 @@ See variable compilation-error-regexp-alist for more details.")
 
 (global-set-key [?\C-,] 'decrement-region-indent)
 (global-set-key [?\C-.] 'increment-region-indent)
+
+
+; M-x package-refresh-contents RET
+; M-x package-install RET ein RET
+
+
+(require 'package)
+;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+(setq custom-file (concat user-emacs-directory "/custom.el"))
+
+(dolist (package '(use-package
+                   ein))
+   (unless (package-installed-p package)
+       (package-install package)))
+
+(setq ein:output-area-inlined-images t)
+
+(use-package lsp-mode :ensure t)
+
+;; trying this
+(setq lsp-rust-server 'rust-analyzer)
+
+;; run "M-x lsp" in a rust buffer
+;; (Optionally) bind commands like
+;; lsp-rust-analyzer-join-lines, lsp-extend-selection and lsp-rust-analyzer-expand-macro to keys.
+
+;; On Linux to install the rust-analyzer binary into ~/.local/bin, this commands could be used
+
+;; $ curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/.local/bin/rust-analyzer
+;; $ chmod +x ~/.local/bin/rust-analyzer
+
+;; Ensure ~/.local/bin is listed in the $PATH variable.
+
+(load-theme 'wombat t)
