@@ -465,21 +465,21 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 
 (el-get 'sync '(;workgroups
-                graphviz-dot-mode
+                ;graphviz-dot-mode
                 markdown-mode
                 anaphora
                 color-theme
                 color-theme-solarized
-;                haskell-mode
+                ;haskell-mode
                 mode-compile
-                erlang-mode
+                ;erlang-mode
                 yaml-mode
                 terraform-mode
                 ;ess
-                tuareg-mode
-                rust-mode
-                go-mode
-                restclient
+                ;tuareg-mode
+                ;rust-mode
+                ;go-mode
+                ;restclient
                 ;nxhtml
                 ))
 
@@ -869,8 +869,10 @@ See variable compilation-error-regexp-alist for more details.")
 
 (setq custom-file (concat user-emacs-directory "/custom.el"))
 
+; pyvenv-activate to use virtual environments for python (i.e. when using compile mode)
 (dolist (package '(use-package
-                   ein))
+                    ein
+                    pyvenv))
    (unless (package-installed-p package)
        (package-install package)))
 
