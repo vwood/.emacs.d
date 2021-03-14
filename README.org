@@ -6,6 +6,6 @@ First time start-up will take a while as el-get downloads all the packages it ca
 
 *** Licence
    Some of this is obviously not my own, nor do I claim anything outside of *init.el* as mine.
-   As far as I know it's all free to share. I take no responsibility. Ever.
+   As far as I know it's all free to share.
 
 
