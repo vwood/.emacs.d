@@ -872,7 +872,9 @@ See variable compilation-error-regexp-alist for more details.")
 ; pyvenv-activate to use virtual environments for python (i.e. when using compile mode)
 (dolist (package '(use-package
                     ein
-                    pyvenv))
+                    pyvenv
+                    flycheck
+                    magit))
    (unless (package-installed-p package)
        (package-install package)))
 
