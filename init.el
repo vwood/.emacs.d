@@ -897,3 +897,12 @@ See variable compilation-error-regexp-alist for more details.")
 ;; Ensure ~/.local/bin is listed in the $PATH variable.
 
 (load-theme 'wombat t)
+
+
+; Enable fly spell for text modes
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
+; Disable fly spell for particular text modes
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
