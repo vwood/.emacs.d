@@ -469,7 +469,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 markdown-mode
                 anaphora
                 color-theme
-                color-theme-solarized
+                ;color-theme-solarized
                 ;haskell-mode
                 mode-compile
                 ;erlang-mode
@@ -511,25 +511,6 @@ tr:nth-child(2n) { background-color: #FF8; }
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 
-;; Fix for changes to solarized changing API
-(defun set-solarized-light ()
-  (customize-set-variable 'frame-background-mode 'light)
-  (load-theme 'solarized t))
-
-(defun set-solarized-dark ()
-  (customize-set-variable 'frame-background-mode 'dark)
-  (load-theme 'solarized t))
-
-;; Toggle between dark and night
-(defun update-color-theme ()
-  (if color-theme-is-dark
-      (funcall color-theme-dark-theme)
-    (funcall color-theme-light-theme)))
-
-(defun toggle-color-theme ()
-  (interactive)
-  (setq color-theme-is-dark (not color-theme-is-dark))
-  (update-color-theme))
 
 ;; system specific fonts
 (when (eq 'windows-nt system-type)
@@ -578,18 +559,6 @@ tr:nth-child(2n) { background-color: #FF8; }
       compilation-save-buffers-predicate '(lambda () nil))
 
 (global-font-lock-mode t)
-(when (require 'color-theme nil t)
-  (require 'color-theme-autoloads "color-theme-autoloads")
-  (color-theme-initialize)
-  (if (require 'color-theme-solarized nil t)
-      (setq color-theme-dark-theme 'set-solarized-dark
-            color-theme-light-theme 'set-solarized-light)
-    (setq color-theme-dark-theme 'color-theme-charcoal-black
-          color-theme-light-theme 'color-theme-vim-colors))
-  (setq color-theme-is-dark nil
-        color-theme-is-global t
-        color-theme-is-cumulative t)
-  (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
 
 (global-set-key '[(ctrl %)] 'query-replace-regexp)
 (setq glasses-separate-parentheses-p nil) ; Do not separate parens in glasses-mode
@@ -874,9 +843,11 @@ See variable compilation-error-regexp-alist for more details.")
                     ein
                     pyvenv
                     flycheck
+                    solarized-theme
                     magit))
    (unless (package-installed-p package)
        (package-install package)))
+
 
 (setq ein:output-area-inlined-images t)
 
@@ -884,7 +855,6 @@ See variable compilation-error-regexp-alist for more details.")
 
 ;; trying this
 (setq lsp-rust-server 'rust-analyzer)
-
 ;; run "M-x lsp" in a rust buffer
 ;; (Optionally) bind commands like
 ;; lsp-rust-analyzer-join-lines, lsp-extend-selection and lsp-rust-analyzer-expand-macro to keys.
@@ -896,8 +866,6 @@ See variable compilation-error-regexp-alist for more details.")
 
 ;; Ensure ~/.local/bin is listed in the $PATH variable.
 
-(load-theme 'wombat t)
-
 
 ; Enable fly spell for text modes
 (dolist (hook '(text-mode-hook))
@@ -906,3 +874,40 @@ See variable compilation-error-regexp-alist for more details.")
 ; Disable fly spell for particular text modes
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode -1))))
+
+
+
+;; Fix for changes to solarized changing API
+(defun set-solarized-light ()
+  (customize-set-variable 'frame-background-mode 'light)
+  (load-theme 'solarized-light-high-contrast t))
+
+(defun set-solarized-dark ()
+  (customize-set-variable 'frame-background-mode 'dark)
+  (load-theme 'solarized-dark-high-contrast t))
+
+;; Toggle between dark and night
+(defun update-color-theme ()
+  (if color-theme-is-dark
+      (funcall color-theme-dark-theme)
+    (funcall color-theme-light-theme)))
+
+(defun toggle-color-theme ()
+  (interactive)
+  (setq color-theme-is-dark (not color-theme-is-dark))
+  (update-color-theme))
+
+(when (require 'color-theme nil t)
+  (require 'color-theme-autoloads "color-theme-autoloads")
+  (color-theme-initialize)
+  (if (require 'color-theme-solarized nil t)
+      (setq color-theme-dark-theme 'set-solarized-dark
+            color-theme-light-theme 'set-solarized-light)
+    (setq color-theme-dark-theme 'color-theme-charcoal-black
+          color-theme-light-theme 'color-theme-vim-colors))
+  (setq color-theme-is-dark nil
+        color-theme-is-global t
+        color-theme-is-cumulative t)
+  (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
+
+(toggle-color-theme)
