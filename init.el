@@ -841,13 +841,19 @@ See variable compilation-error-regexp-alist for more details.")
 ; pyvenv-activate to use virtual environments for python (i.e. when using compile mode)
 (dolist (package '(use-package
                     ein
+                    jedi
                     pyvenv
                     flycheck
                     solarized-theme
+                    transpose-frame
                     magit))
    (unless (package-installed-p package)
-       (package-install package)))
+     (package-install package)))
 
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(global-set-key [?\C-x ?4] 'transpose-frame)
 
 (setq ein:output-area-inlined-images t)
 
