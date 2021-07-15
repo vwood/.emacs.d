@@ -846,6 +846,7 @@ See variable compilation-error-regexp-alist for more details.")
                     flycheck
                     solarized-theme
                     transpose-frame
+                    terraform-mode
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
