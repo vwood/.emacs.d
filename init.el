@@ -846,10 +846,14 @@ See variable compilation-error-regexp-alist for more details.")
                     flycheck
                     solarized-theme
                     transpose-frame
+                    powerline
                     terraform-mode
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
+
+(require 'powerline)
+(powerline-default-theme)
 
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
