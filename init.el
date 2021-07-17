@@ -847,6 +847,7 @@ See variable compilation-error-regexp-alist for more details.")
                     solarized-theme
                     transpose-frame
                     terraform-mode
+                    smart-mode-line
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
@@ -859,6 +860,8 @@ See variable compilation-error-regexp-alist for more details.")
 (setq ein:output-area-inlined-images t)
 
 (use-package lsp-mode :ensure t)
+
+(smart-mode-line-enable)
 
 ;; trying this
 (setq lsp-rust-server 'rust-analyzer)
