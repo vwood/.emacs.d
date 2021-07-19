@@ -856,7 +856,7 @@ See variable compilation-error-regexp-alist for more details.")
 (powerline-default-theme)
 
 (add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+; (setq jedi:complete-on-dot t)
 
 (global-set-key [?\C-x ?4] 'transpose-frame)
 
