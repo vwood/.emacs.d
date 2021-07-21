@@ -848,6 +848,7 @@ See variable compilation-error-regexp-alist for more details.")
                     transpose-frame
                     powerline
                     terraform-mode
+                    annotate
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
