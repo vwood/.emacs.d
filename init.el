@@ -692,7 +692,16 @@ See variable compilation-error-regexp-alist for more details.")
 
 ;; Name compilation buffer after the buffer name
 (setq compilation-buffer-name-function 
-      (lambda (mode) (concat "*" (downcase mode) ": " (buffer-name) "*")))
+      (lambda (mode)
+          (concat "*" (downcase mode) ": " (buffer-name) "*")))
+
+;; Don't if we're running rust-check on an entire project
+(add-hook 'rust-mode-hook
+          (lambda ()
+            (set (make-local-variable 'compilation-buffer-name-function)
+                 (lambda (mode)
+                   (concat "*" (downcase mode) "*")))))
+
 
 ;; Search forward/backward for symbol at point
 (when (require 'smart-symbol nil t)
