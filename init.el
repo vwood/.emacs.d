@@ -42,7 +42,7 @@
 (let ((tab-size 4))
   (add-hook 'c-initialization-hook
             (lambda ()
-              (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
+              (define-key c-mode-base-map "\C-m" 'c-cpaontext-line-break)))
   (add-hook 'c-mode-hook
             `(lambda ()
               (setq c-basic-offset ,tab-size
@@ -457,12 +457,8 @@ tr:nth-child(2n) { background-color: #FF8; }
                     (eval-print-last-sexp)))))
 (setq el-get-git-shallow-clone t)
 
-(when (/= emacs-major-version 24)
-    (defvar custom-theme-load-path nil)) ; work around color-theme-solarized recipe on emacs23
-
 (setq el-get-sources
       '((:name restclient :type git :url "https://github.com/pashky/restclient.el.git")))
-
 
 (el-get 'sync '(;workgroups
                 ;graphviz-dot-mode
@@ -474,7 +470,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                 mode-compile
                 ;erlang-mode
                 yaml-mode
-                terraform-mode
+                ;terraform-mode
                 ;ess
                 ;tuareg-mode
                 ;rust-mode
@@ -482,10 +478,6 @@ tr:nth-child(2n) { background-color: #FF8; }
                 ;restclient
                 ;nxhtml
                 ))
-
-
-(when (/= emacs-major-version 24)
-  (add-to-list 'load-path (first custom-theme-load-path)))
 
 ;; Disable _ becoming <- in ess. Don't have this in muscle memory and always use _ in var names
 ; TODO: Check ess is loaded
@@ -857,7 +849,9 @@ See variable compilation-error-regexp-alist for more details.")
                     transpose-frame
                     powerline
                     terraform-mode
+                    rust-mode
                     annotate
+                    lsp-java
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
@@ -873,6 +867,10 @@ See variable compilation-error-regexp-alist for more details.")
 (setq ein:output-area-inlined-images t)
 
 (use-package lsp-mode :ensure t)
+
+;; JAVA LSP
+(require 'lsp-java)
+(add-hook 'java-mode-hook #'lsp)
 
 ;; trying this
 (setq lsp-rust-server 'rust-analyzer)
