@@ -930,3 +930,5 @@ See variable compilation-error-regexp-alist for more details.")
   (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
 
 (toggle-color-theme)
+
+(global-set-key [f5] 'revert-buffer)
