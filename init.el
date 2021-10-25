@@ -42,7 +42,7 @@
 (let ((tab-size 4))
   (add-hook 'c-initialization-hook
             (lambda ()
-              (define-key c-mode-base-map "\C-m" 'c-cpaontext-line-break)))
+              (define-key c-mode-base-map "\C-m" 'c-context-line-break)))
   (add-hook 'c-mode-hook
             `(lambda ()
               (setq c-basic-offset ,tab-size
