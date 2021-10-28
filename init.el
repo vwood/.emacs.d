@@ -535,11 +535,12 @@ tr:nth-child(2n) { background-color: #FF8; }
 (global-set-key '[(ctrl %)] 'query-replace-regexp)
 (setq glasses-separate-parentheses-p nil) ; Do not separate parens in glasses-mode
 
+;; Deprecating flet was a pointlessly bad and stupid decision, make emacs shut its hole about it
+(defalias 'flet 'cl-flet)
 
 ;; I have never ever wanted mode-compile to ask for arguments
 (defun mode-compile-quiet ()
   (interactive)
-  ; Deprecating flet was a pointlessly bad decision
   (cl-letf (((symbol-function 'read-string) (lambda (&rest args) "")))
     (mode-compile)))
 
