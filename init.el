@@ -758,7 +758,6 @@ See variable compilation-error-regexp-alist for more details.")
                     rust-mode
                     annotate
                     lsp-java
-                    workgroups
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
@@ -766,26 +765,6 @@ See variable compilation-error-regexp-alist for more details.")
 (require 'powerline)
 (powerline-default-theme)
 
-
-;; Use workgroups if available, otherwise try escreen ...
-(if (require 'workgroups nil t)
-    (progn 
-      (fset 'wg-mode-line-add-display (lambda () nil))
-      (fset 'wg-mode-line-remove-display (lambda () nil))
-      (global-set-key (kbd "C-\\") nil)
-      (setq wg-prefix-key (kbd "C-\\")) ; Match escreen keybindings
-      (workgroups-mode 1)
-      (setq wg-morph-on nil))
-  (when (require 'escreen nil t) ; C-\ c, C-\ n, C-\ p, C-\ k
-    (escreen-install)))
-
-;; Try to restore old workgroups - save them there if you want restored by default.
-(let ((wg-location "~/.emacs.d/workgroups")
-      (wg-local "~/.emacs.d/local/workgroups"))
-  (cond 
-   ((file-exists-p wg-local) (wg-load wg-local))
-   ((file-exists-p wg-location) (wg-load wg-location))
-))
 
 (add-hook 'python-mode-hook 'jedi:setup)
 ; (setq jedi:complete-on-dot t)
