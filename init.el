@@ -768,7 +768,8 @@ See variable compilation-error-regexp-alist for more details.")
 (powerline-default-theme)
 
 ; Some React projects just use *.js
-(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
 
 (add-hook 'python-mode-hook 'jedi:setup)
 ; (setq jedi:complete-on-dot t)
