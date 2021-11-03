@@ -758,13 +758,13 @@ See variable compilation-error-regexp-alist for more details.")
                     rust-mode
                     annotate
                     lsp-java
+                    workgroups2
                     magit))
    (unless (package-installed-p package)
      (package-install package)))
 
 (require 'powerline)
 (powerline-default-theme)
-
 
 (add-hook 'python-mode-hook 'jedi:setup)
 ; (setq jedi:complete-on-dot t)
@@ -847,3 +847,41 @@ See variable compilation-error-regexp-alist for more details.")
 (toggle-color-theme)
 
 (global-set-key [f5] 'revert-buffer)
+
+;; This package is on thin ice with the amount of pointless changes and missing functionality
+(global-unset-key (kbd "C-\\"))
+(setq wg-prefix-key "C-\\"
+      wg-session-file "~/.emacs.d/workgroups")
+(require 'workgroups2)
+(global-set-key (kbd "C-\\ s") (lambda () (interactive) (wg-save-session)))
+(global-set-key (kbd "C-\\ l") (lambda () (interactive) (wg-open-session)))
+(global-set-key (kbd "C-\\ c") 'wg-create-workgroup)
+(workgroups-mode 1)
+
+(global-set-key (kbd "C-\\ g") 'wg-switch-to-workgroup)
+(global-set-key (kbd "C-\\ n") 'wg-next-workgroup)
+(global-set-key (kbd "C-\\ p") 'wg-prev-workgroup)
+
+; These still give me (wrong-type-argument listp help-xref-stack-item) occasionally
+(defun wg-next-workgroup ()
+  "Open next workgroup."
+  (interactive)
+  (let* ((group-names (mapcar #'car (wg-workgroup-names)))
+         (current-name (wg-workgroup-name (wg-current-workgroup)))
+         (position (cl-position current-name group-names :test 'string-equal))
+         (next-position (if (= (1+ position) (length group-names)) 0 (1+ position))))
+    (wg-open-session)
+    (message (nth next-position group-names))
+    (wg-switch-to-workgroup-internal (nth next-position group-names))))
+
+(defun wg-prev-workgroup ()
+  "Open prev workgroup."
+  (interactive)
+  (let* ((group-names (mapcar #'car (wg-workgroup-names)))
+         (current-name (wg-workgroup-name (wg-current-workgroup)))
+         (position (cl-position current-name group-names :test 'string-equal))
+         (next-position (1- (if (= position 0) (length group-names) position))))
+    (wg-open-session)
+    (message (nth next-position group-names))
+    (wg-switch-to-workgroup-internal (nth next-position group-names))))
+
