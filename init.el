@@ -771,6 +771,19 @@ See variable compilation-error-regexp-alist for more details.")
 (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
 
+;; Use `rjsx-mode' for JS files.
+; (advice-add 'js-jsx-enable :override #'my-js-jsx-enable)
+; (defun my-js-jsx-enable ()
+;  "Use `rjsx-mode' instead of `js-jsx-mode'."
+;  (cl-letf (((symbol-function 'js-jsx--detect-and-enable) (lambda () t)))
+;    (rjsx-mode)))
+;; Prevent the `rjsx-mode' ancestor `js-mode' from continuing to check
+;; for JSX code.
+; (add-hook 'rjsx-mode-hook (lambda ()
+;                            (remove-hook 'after-change-functions
+;                                         #'js-jsx--detect-after-change t)))
+
+
 (add-hook 'python-mode-hook 'jedi:setup)
 ; (setq jedi:complete-on-dot t)
 
@@ -866,6 +879,10 @@ See variable compilation-error-regexp-alist for more details.")
 (global-set-key (kbd "C-\\ g") 'wg-switch-to-workgroup)
 (global-set-key (kbd "C-\\ n") 'wg-next-workgroup)
 (global-set-key (kbd "C-\\ p") 'wg-prev-workgroup)
+
+(global-set-key (kbd "C-;") 'comment-region)
+(global-set-key (kbd "C-:") 'uncomment-region)
+
 
 ; These still give me (wrong-type-argument listp help-xref-stack-item) occasionally
 (defun wg-next-workgroup ()
