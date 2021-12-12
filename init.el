@@ -912,3 +912,17 @@ See variable compilation-error-regexp-alist for more details.")
     (message (nth next-position group-names))
     (wg-switch-to-workgroup-internal (nth next-position group-names))))
 
+(defun arrayify (start end quote)
+  "Turn strings on newlines into a QUOTEd, comma-separated one-liner."
+  (interactive "r\nMQuote: ")
+  (let ((insertion
+         (mapconcat
+          (lambda (x) (format "%s%s%s" quote x quote))
+          (split-string (buffer-substring start end)) ", ")))
+    (delete-region start end)
+    (insert insertion)))
+
+
+
+
+
