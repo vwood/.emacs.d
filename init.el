@@ -556,6 +556,7 @@ tr:nth-child(2n) { background-color: #FF8; }
                       (add-to-list 'after-save-hook 'mode-compile-quiet)
                       (message "Compiling after saving.")))))
 
+
 (defvar rust-command "cargo" "command to compile rust")
 (defvar rust-flags "check" "flags to compile rust")
 (defvar rust-compilation-error-regexp-alist
@@ -613,6 +614,7 @@ See variable compilation-error-regexp-alist for more details.")
 
 (global-set-key '[(ctrl c) (c)] 'mode-compile-quiet)
 (global-set-key '[(ctrl c) (k)] 'mode-compile-kill)
+
 
 ;; Name compilation buffer after the buffer name
 (setq compilation-buffer-name-function 
@@ -688,7 +690,10 @@ See variable compilation-error-regexp-alist for more details.")
              (lambda (buffer msg)
                (save-excursion
                  (set-buffer buffer)
-                 (refresh-iimages))))
+                 (refresh-iimages)
+                 ; this is necessary to set the point in the currently open compile buffer
+                 (set-window-point (get-buffer-window buffer) (point-min)))))
+
 
 (eval-after-load 're-builder
   '(setq reb-re-syntax 'string))
