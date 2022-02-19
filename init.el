@@ -301,7 +301,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 
   (define-key ac-completing-map [return] nil)
   (define-key ac-completing-map "\r" nil)
-  
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (ac-config-default)
 
@@ -761,6 +760,11 @@ See variable compilation-error-regexp-alist for more details.")
                     rjsx-mode))
    (unless (package-installed-p package)
      (package-install package)))
+
+
+(when (require 'auto-complete nil t)
+  (add-to-list 'ac-modes 'rust-mode)
+  (add-hook 'rust-mode-hook 'auto-complete-mode)) ; weirdly adding to ac-modes didn't work on its own
 
 (require 'powerline)
 (powerline-default-theme)
