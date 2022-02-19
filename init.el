@@ -331,7 +331,6 @@ tr:nth-child(2n) { background-color: #FF8; }
   (define-key ac-completing-map [return] nil)
   (define-key ac-completing-map "\r" nil))
 
-
 ;; Why would anyone want it to beep - seriously?
 (when (fboundp 'set-message-beep)
   (set-message-beep 'silent))
@@ -342,12 +341,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 ;; UTF-8
 (prefer-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
-
-;; Configure ERC
-(setq erc-nick "scombinator"
-      erc-user-full-name "λ xyz.xz(yz)"
-      erc-hide-list '("JOIN" "PART" "QUIT") ; Don't notify on join/part/quit
-      erc-server-auto-reconnect nil) ; auto-reconnect disobeys options and locks emacs if no connection is available
 
 ;; Common Lisp Indentation rules != ELISP rules
 (add-hook 'lisp-mode-hook
@@ -921,8 +914,4 @@ See variable compilation-error-regexp-alist for more details.")
           (split-string (buffer-substring start end)) ", ")))
     (delete-region start end)
     (insert insertion)))
-
-
-
-
 
