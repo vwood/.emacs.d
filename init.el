@@ -139,6 +139,9 @@ CURRENT-NAME, if it does not already have them:
 (setq show-paren-style 'parenthesis) ; Highlight just parens
 ;(setq show-paren-style 'expression) ; Highlight entire expression
 
+;; Silence bell
+(setq ring-bell-function 'ignore)
+
 ;; Fix tabs
 (let ((tab-size 4))
   (add-hook 'c-initialization-hook
@@ -177,6 +180,12 @@ CURRENT-NAME, if it does not already have them:
             (define-key python-mode-map "\C-m" 'newline-and-indent)
             (setq indent-tabs-mode nil
                   tab-width (default-value 'tab-width))))
+
+;; If we're on a mac, we need to use Conda because apple hates developers
+(when (eq 'darwin system-type)
+  (let ((conda-bin (concat (getenv "HOME") "/miniforge3/bin")))
+    (setq exec-path (cons conda-bin exec-path))
+    (setenv "PATH" (concat conda-bin ":" (getenv "PATH")))))
 
 ;; If we're on a windows machine - setup Cygwin
 (let* ((cygwin-root "c:/cygwin")
@@ -590,6 +599,8 @@ tr:nth-child(2n) { background-color: #FF8; }
 
 ;; Make the font size reasonable
 (set-face-attribute 'default nil :height 120)
+
+;; For presenting: (set-face-attribute 'default nil :height 180)
 
 ;; Rid us of the disabled C-x C-n command, if I want to use that then M-x is fine
 (global-set-key (kbd "C-x C-n") nil)
