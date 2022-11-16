@@ -293,7 +293,11 @@ CURRENT-NAME, if it does not already have them:
    org-remember-templates '((116 "* TODO %?\n %u" "~/todo.org" "Tasks") ; Templates for quick tasks (C-M-r t)
                             (110 "* %u %?" "~/notes.org" "Notes"))      ;                 and notes (C-M-r n)
    remember-annotation-functions '(org-remember-annotation)
-   remember-handler-functions '(org-remember-handler))
+   remember-handler-functions '(org-remember-handler)
+   org-cycle-separator-lines -1 ; stop hiding empty lines
+   )
+
+  
   ;(org-defkey org-mode-map (kbd "C-c n") 'my-org-table-swap-next-cell)
   ;(org-defkey org-mode-map (kbd "C-c p") 'my-org-table-swap-prev-cell)
   (setq org-export-html-style
@@ -782,6 +786,10 @@ See variable compilation-error-regexp-alist for more details.")
 (setq minibuffer-prompt-properties
        (plist-put minibuffer-prompt-properties 'point-entered 'minibuffer-avoid-prompt))
 
+;; Don't just make raw paths images
+(setq iimage-mode-image-regex-alist
+      '(("\\(`?file://\\|\\[\\[\\|<\\|`\\)\\([-+./_0-9a-zA-Z]+\\.\\(GIF\\|JP\\(?:E?G\\)\\|P\\(?:BM\\|GM\\|N[GM]\\|PM\\)\\|SVG\\|TIFF?\\|X\\(?:[BP]M\\)\\|gif\\|jp\\(?:e?g\\)\\|p\\(?:bm\\|gm\\|n[gm]\\|pm\\)\\|svg\\|tiff?\\|x\\(?:[bp]m\\)\\)\\)\\(\\]\\]\\|>\\|'\\)" . 2)))
+
 (auto-image-file-mode 1)
 
 (iimage-mode)
@@ -940,6 +948,7 @@ See variable compilation-error-regexp-alist for more details.")
 ; Enable fly spell for text modes
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
+; on mac:  brew install ispell
 
 ; Disable fly spell for particular text modes
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
