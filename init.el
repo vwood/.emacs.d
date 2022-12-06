@@ -1044,3 +1044,8 @@ See variable compilation-error-regexp-alist for more details.")
     (delete-region start end)
     (insert insertion)))
 
+;; Add bicep mode while working on Azure infrastructure
+; from: https://github.com/christiaan-janssen/bicep-mode
+(if (file-directory-p "~/.emacs.d/bicep-mode")
+    (use-package "bicep-mode"
+      :load-path "~/.emacs.d/bicep-mode"))
