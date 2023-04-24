@@ -250,6 +250,11 @@ CURRENT-NAME, if it does not already have them:
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+;; Lock files can ruin all sorts of software that grabs all files in a directory
+;; (Not sure who the bad guy is here, but we fix it to be robust here)
+(setq lock-file-name-transforms
+      `((".*" "~/tmp/emacs-lockfiles/" t)))
+;; (setq create-lockfiles nil)
 
 
 ;;; Makefiles need hard TABS
