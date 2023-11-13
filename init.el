@@ -116,7 +116,7 @@ CURRENT-NAME, if it does not already have them:
 (setq tramp-mode nil)
 
 ;; Access packages in .emacs.d
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path "~/.emacs.d/local")
 
 ;; Remove clutter
 (when window-system
@@ -574,19 +574,10 @@ tr:nth-child(2n) { background-color: #FF8; }
 (setq el-get-sources
       '((:name restclient :type git :url "https://github.com/pashky/restclient.el.git")))
 
-(el-get 'sync '(;markdown-mode
-                ;anaphora
+(el-get 'sync '(
                 color-theme
-                ;color-theme-solarized
-                ;haskell-mode
                 mode-compile
-                ;erlang-mode
                 yaml-mode
-                ;tuareg-mode
-                ;rust-mode
-                ;go-mode
-                ;restclient
-                ;nxhtml
                 ))
 
 ;; Associate .http with RESTclient
@@ -886,7 +877,8 @@ See variable compilation-error-regexp-alist for more details.")
                     workgroups2
                     magit
                     restclient
-                    rjsx-mode))
+                    rjsx-mode
+                    todotxt))
    (unless (package-installed-p package)
      (package-install package)))
 
@@ -1049,8 +1041,17 @@ See variable compilation-error-regexp-alist for more details.")
     (delete-region start end)
     (insert insertion)))
 
+
 ;; Add bicep mode while working on Azure infrastructure
 ; from: https://github.com/christiaan-janssen/bicep-mode
 (if (file-directory-p "~/.emacs.d/bicep-mode")
     (use-package "bicep-mode"
       :load-path "~/.emacs.d/bicep-mode"))
+
+;; org-agenda
+(setq org-log-done t)
+(setq org-agenda-fil '("~/notes.org", "~/tasks.org"))
+
+(require 'kickasm-mode)
+(add-to-list 'auto-mode-alist '("\\.asm" . kickasm-mode))
+
