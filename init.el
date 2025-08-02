@@ -134,6 +134,9 @@ CURRENT-NAME, if it does not already have them:
 ;; Always use CommonLisp extensions
 (require 'cl)
 
+;; Need to add to local packages by hand
+(require 'mode-compile)
+
 ;; Paren highlighting
 (show-paren-mode 1)
 (setq show-paren-style 'parenthesis) ; Highlight just parens
@@ -560,26 +563,6 @@ tr:nth-child(2n) { background-color: #FF8; }
 (setq newsticker-url-list '(("M-x emacs-reddit" "http://reddit.com/r/emacs/.rss" nil nil nil)))
 (setq newsticker-frontend 'newsticker-plainview)
 
-;; Use el-get, Downloading it if needed, (ensure gnutls is installed in windows)
-;; May need to do by hand in windows.
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(unless (require 'el-get nil t)
-  (url-retrieve "https://raw.github.com/dimitri/el-get/master/el-get-install.el" 
-                (lambda (s) 
-                  (let (el-get-master-branch) 
-                    (end-of-buffer) 
-                    (eval-print-last-sexp)))))
-(setq el-get-git-shallow-clone t)
-
-(setq el-get-sources
-      '((:name restclient :type git :url "https://github.com/pashky/restclient.el.git")))
-
-(el-get 'sync '(
-                color-theme
-                mode-compile
-                yaml-mode
-                ))
-
 ;; Associate .http with RESTclient
 (add-to-list 'auto-mode-alist '("\\.http" . restclient-mode))
 
@@ -867,6 +850,7 @@ See variable compilation-error-regexp-alist for more details.")
                     jedi
                     pyvenv
                     flycheck
+                    yaml-mode
                     solarized-theme
                     transpose-frame
                     powerline
@@ -952,7 +936,6 @@ See variable compilation-error-regexp-alist for more details.")
   (add-hook hook (lambda () (flyspell-mode -1))))
 
 
-
 ;; Fix for changes to solarized changing API
 (defun set-solarized-light ()
   (customize-set-variable 'frame-background-mode 'light)
@@ -973,18 +956,13 @@ See variable compilation-error-regexp-alist for more details.")
   (setq color-theme-is-dark (not color-theme-is-dark))
   (update-color-theme))
 
-(when (require 'color-theme nil t)
-  (require 'color-theme-autoloads "color-theme-autoloads")
-  (color-theme-initialize)
-  (if (require 'color-theme-solarized nil t)
-      (setq color-theme-dark-theme 'set-solarized-dark
-            color-theme-light-theme 'set-solarized-light)
-    (setq color-theme-dark-theme 'color-theme-charcoal-black
-          color-theme-light-theme 'color-theme-vim-colors))
-  (setq color-theme-is-dark nil
-        color-theme-is-global t
-        color-theme-is-cumulative t)
-  (update-color-theme)) ; color-theme-is-cumulative appears to be buggy in init.
+;;   (require 'color-theme-autoloads "color-theme-autoloads")
+(setq color-theme-dark-theme 'set-solarized-dark
+      color-theme-light-theme 'set-solarized-light
+      color-theme-is-dark nil
+      color-theme-is-global t
+      color-theme-is-cumulative t)
+(update-color-theme) ; color-theme-is-cumulative appears to be buggy in init.
 
 (toggle-color-theme)
 
